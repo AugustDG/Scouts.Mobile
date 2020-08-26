@@ -459,45 +459,6 @@
         <e p="Specific" t="Include" />
       </e>
       <e p="Scouts.iOS" t="IncludeRecursive">
-        <e p="AppDelegate.cs" t="Include" />
-        <e p="Assets.xcassets" t="Include">
-          <e p="AppIcon.appiconset" t="Include">
-            <e p="Contents.json" t="Include" />
-            <e p="Icon1024.png" t="Include" />
-            <e p="Icon120.png" t="Include" />
-            <e p="Icon152.png" t="Include" />
-            <e p="Icon167.png" t="Include" />
-            <e p="Icon180.png" t="Include" />
-            <e p="Icon20.png" t="Include" />
-            <e p="Icon29.png" t="Include" />
-            <e p="Icon40.png" t="Include" />
-            <e p="Icon58.png" t="Include" />
-            <e p="Icon60.png" t="Include" />
-            <e p="Icon76.png" t="Include" />
-            <e p="Icon80.png" t="Include" />
-            <e p="Icon87.png" t="Include" />
-          </e>
-        </e>
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="Entitlements.plist" t="Include" />
-        <e p="Info.plist" t="Include" />
-        <e p="Main.cs" t="Include" />
-        <e p="obj" t="ExcludeRecursive" />
-        <e p="Properties" t="Include">
-          <e p="AssemblyInfo.cs" t="Include" />
-        </e>
-        <e p="Resources" t="Include">
-          <e p="LaunchScreen.storyboard" t="Include" />
-          <e p="tab_about.png" t="Include" />
-          <e p="tab_about@2x.png" t="Include" />
-          <e p="tab_about@3x.png" t="Include" />
-          <e p="tab_feed.png" t="Include" />
-          <e p="tab_feed@2x.png" t="Include" />
-          <e p="tab_feed@3x.png" t="Include" />
-          <e p="xamarin_logo.png" t="Include" />
-          <e p="xamarin_logo@2x.png" t="Include" />
-          <e p="xamarin_logo@3x.png" t="Include" />
-        </e>
         <e p="Scouts.iOS.csproj" t="IncludeRecursive" />
       </e>
       <e p="Scouts.sln" t="IncludeFlat" />
