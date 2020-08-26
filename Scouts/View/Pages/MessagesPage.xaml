@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Scouts.View.Pages.MessagesPage"
+             BackgroundColor="{DynamicResource MainBackgroundColor}">
+
+    <Shell.TitleView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ImageButton Grid.Column="0"
+                         Source="@drawable/user_64"
+                         HorizontalOptions="Start"
+                         Command="{Binding ShowOptionsCommand}"
+                         Margin="0, 10, 0, 10"
+                         CornerRadius="25"
+                         WidthRequest="36"
+                         BackgroundColor="{DynamicResource UserColor}"/>
+
+            <Label Grid.Column="1"
+                   Text="MESSAGES"
+                   VerticalOptions="Center"
+                   HorizontalOptions="FillAndExpand"
+
+                   Margin="-12, 0, 0, 0"
+
+                   FontSize="25"
+                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+        </Grid>
+    </Shell.TitleView>
+
+    <AbsoluteLayout Margin="0, 3, 0, 3">
+        <RefreshView x:Name="RefreshCircle"
+                     BackgroundColor="{DynamicResource SecondaryBackgroundColor}"
+                     RefreshColor="{StaticResource SyncPrimaryColor}"
+                     IsRefreshing="False"
+
+                     AbsoluteLayout.LayoutFlags="All"
+                     AbsoluteLayout.LayoutBounds="0,0,1,1"
+
+                     Command="{Binding RefreshContactsCommand}"
+                     Refreshing="RefreshView_OnRefreshing">
+            <CollectionView ItemsSource="{Binding UserCollection}"
+                            ItemsLayout="VerticalList"
+                            ItemSizingStrategy="MeasureFirstItem"
+
+                            SelectionMode="Single"
+
+                            VerticalScrollBarVisibility="Always"
+
+                            VerticalOptions="FillAndExpand"
+                            HorizontalOptions="FillAndExpand">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="{DynamicResource MainBackgroundColor}"
+                               HeightRequest="100"
+                               Padding="10, 8, 10, 8">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="CollectionView_OnItemTapped"
+                                                      NumberOfTapsRequired="1" />
+                            </Frame.GestureRecognizers>
+                            <Frame BackgroundColor="{Binding Color}"
+                                   Padding="15, 0, 20, 0"
+                                   HasShadow="True"
+                                   CornerRadius="5">
+                                <Grid RowSpacing="5" ColumnSpacing="15">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="0.5*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.18*" />
+                                        <ColumnDefinition Width="0.8*" />
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <Frame Grid.Column="0" Grid.RowSpan="2"
+                                           BackgroundColor="{Binding Color}"
+                                           Margin="5, 15, 0, 15"
+                                           Padding="0"
+                                           CornerRadius="100"
+                                           HasShadow="True">
+                                        <Label HorizontalOptions="CenterAndExpand"
+                                               VerticalOptions="CenterAndExpand"
+                                               
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center"
+                                               
+                                               Text="{Binding FirstLetter}"
+                                               TextColor="{StaticResource SyncPrimaryForegroundColor}"
+                                               FontAttributes="Bold"
+                                               FontSize="30"/> 
+                                    </Frame>
+
+                                    <Label Grid.Column="1" Grid.Row="0"
+                                           Text="{Binding Username}"
+                                           Margin="10, 15, 0, 15"
+                                           FontAttributes="Bold"
+                                           TextColor="White"
+                                           FontSize="21" />
+
+                                    <Label Grid.Column="1" Grid.Row="1"
+                                           Text="{Binding Summary}"
+                                           TextColor="LightGray"
+                                           FontSize="15" />
+                                </Grid>
+                            </Frame>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <Frame IsVisible="{Binding IsBusy}"
+
+               AbsoluteLayout.LayoutFlags="All"
+               AbsoluteLayout.LayoutBounds="0,0,1,1"
+
+               BackgroundColor="{DynamicResource MainBackgroundColor}">
+            <ActivityIndicator HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"
+
+                               IsRunning="{Binding IsBusy}"
+
+                               Color="{StaticResource  SyncPrimaryColor}"
+                               BackgroundColor="{DynamicResource MainBackgroundColor}" />
+        </Frame>
+    </AbsoluteLayout>
+</ContentPage>

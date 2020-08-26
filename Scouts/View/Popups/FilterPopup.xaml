@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<popup:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:syncButtons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+                 x:Class="Scouts.View.Popups.FilterPopup"
+                 HasKeyboardOffset="False"
+                 HasSystemPadding="False"
+                 Opacity="0"
+                 TranslationY="-500">
+    
+    <Frame Margin="0, 200, 0, -10"
+           Padding="0"
+           CornerRadius="10"
+           BackgroundColor="{DynamicResource SecondaryBackgroundColor}">
+        <StackLayout>
+            <Label Text="FILTRE"
+                   FontSize="30"
+                   HorizontalTextAlignment="Center"
+
+                   Margin="20, 30, 20, 0"
+                   Padding="0, -5, 0, 0"
+                   HorizontalOptions="FillAndExpand"
+
+                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+            
+            <Picker Title="Public concerné"
+                    TitleColor="{DynamicResource SyncPrimaryForegroundColor}"
+                    SelectedIndex="{Binding InfoPublicType}"
+                    Margin="15, 0, 15, 0"
+
+                    HorizontalOptions="FillAndExpand">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Chefs</x:String>
+                        <x:String>Clan</x:String>
+                        <x:String>Éclaireurs</x:String>
+                        <x:String>Guides</x:String>
+                        <x:String>Louvettes</x:String>
+                        <x:String>Louveteaux</x:String>
+                        <x:String>Castors</x:String>
+                        <x:String>Tous</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+            
+            <Picker Title="Type d'évènement"
+                    TitleColor="{DynamicResource SyncPrimaryForegroundColor}"
+                    SelectedIndex="{Binding InfoEventType}"
+                    Margin="15, 0, 15, 0"
+
+                    HorizontalOptions="FillAndExpand">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Camp</x:String>
+                        <x:String>Réunion</x:String>
+                        <x:String>Évènement</x:String>
+                        <x:String>Infos</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <syncButtons:SfCheckBox IsChecked="{Binding IsUrgent}"
+                                    Text="Urgent?"
+
+                                    Style="{StaticResource CheckStyle}"
+
+                                    Margin="30, 0, 0, 0" />
+            
+            <StackLayout Orientation="Horizontal"
+                         
+                         VerticalOptions="EndAndExpand"
+                         HorizontalOptions="FillAndExpand"
+                         Margin="0, 0, 0, 25">
+                <Button Text="Effacer"
+                        FontSize="18"
+
+                        HorizontalOptions="FillAndExpand"
+                        Margin="10, 0, 5, 0"
+                        CornerRadius="5"
+                    
+                        Command="{Binding ClearFilterCommand}"
+
+                        BackgroundColor="{DynamicResource SecondaryForegroundColor}"
+                        TextColor="{StaticResource SyncPrimaryForegroundColor}" />
+
+                <Button Text="RETOUR"
+                        FontSize="18"
+
+                        HorizontalOptions="FillAndExpand"
+                        Margin="5, 0, 10, 0"
+                        CornerRadius="5"
+                    
+                        Command="{Binding CloseFilterCommand}"
+
+                        BackgroundColor="{DynamicResource SecondaryForegroundColor}"
+                        TextColor="{StaticResource SyncPrimaryColor}" />
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</popup:PopupPage>

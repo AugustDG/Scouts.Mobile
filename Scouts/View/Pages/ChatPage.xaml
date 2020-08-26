@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncInput="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             x:Class="Scouts.View.Pages.ChatPage"
+             BackgroundColor="{DynamicResource MainBackgroundColor}">
+
+    <StackLayout BackgroundColor="{DynamicResource MainBackgroundColor}">
+
+        <Frame BackgroundColor="{DynamicResource MainForegroundColor}"
+               HeightRequest="55"
+               HasShadow="True"
+               Padding="0">
+            <Label Text="{Binding ConnectedRoomName}"
+                   FontSize="25"
+
+                   VerticalOptions="Center"
+                   HorizontalOptions="CenterAndExpand"
+
+                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+        </Frame>
+
+        <AbsoluteLayout Margin="0, 3, 0, 10"
+                        BackgroundColor="Transparent">
+            <Grid AbsoluteLayout.LayoutBounds="1, 1, 1, 1"
+                  AbsoluteLayout.LayoutFlags="All">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.89*" />
+                    <RowDefinition Height="0.11*" />
+                </Grid.RowDefinitions>
+                <CollectionView ItemsSource="{Binding Messages}"
+                                ItemsLayout="VerticalList"
+                                ItemSizingStrategy="MeasureFirstItem"
+
+                                SelectionMode="Single"
+
+                                VerticalScrollBarVisibility="Always"
+                                ItemsUpdatingScrollMode="KeepLastItemInView"
+
+                                VerticalOptions="FillAndExpand"
+                                HorizontalOptions="FillAndExpand">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="Transparent"
+                                   HeightRequest="60"
+                                   Padding="10, 8, 10, 8">
+                                <Frame BackgroundColor="{Binding Color}"
+                                       Padding="10, 0, 10, 0"
+                                       HasShadow="True"
+                                       CornerRadius="5">
+                                    <Grid RowSpacing="5" ColumnSpacing="15">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="0.5*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.13*" />
+                                            <ColumnDefinition Width="0.82*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Frame Grid.Column="0" Grid.RowSpan="2"
+                                               BackgroundColor="{Binding Color}"
+                                               Margin="2, 10, 0, 10"
+                                               Padding="0"
+                                               CornerRadius="100"
+                                               HasShadow="True">
+                                            <Label HorizontalOptions="CenterAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center"
+
+                                                   Text="{Binding FirstLetter}"
+                                                   TextColor="{StaticResource SyncPrimaryForegroundColor}"
+                                                   FontAttributes="Bold"
+                                                   FontSize="25" />
+                                        </Frame>
+
+                                        <Label Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+                                               Text="{Binding Message}"
+                                               TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+                                               FontSize="15"
+
+                                               VerticalTextAlignment="Center"
+                                               HorizontalTextAlignment="Start"
+
+                                               VerticalOptions="CenterAndExpand"
+                                               HorizontalOptions="StartAndExpand" />
+                                    </Grid>
+                                </Frame>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Frame Grid.Row="1"
+                       BackgroundColor="{DynamicResource MainForegroundColor}"
+                       HeightRequest="45"
+                       HasShadow="True"
+                       Padding="0"
+                       Margin="0, 0, 0, -10">
+                    <Grid Margin="13, 5, 10, 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.8*" />
+                            <ColumnDefinition Width="0.11*" />
+                        </Grid.ColumnDefinitions>
+                        <syncInput:SfTextInputLayout Grid.Column="0"
+                                                     Style="{DynamicResource TextInputStyle}"
+
+                                                     Hint="Message"
+                                                     CharMaxLength="100"
+                                                     ShowCharCount="False"
+
+                                                     HorizontalOptions="StartAndExpand">
+
+                            <Entry Text="{Binding CurrentChatMessage.Message, Mode=TwoWay}"
+                                   TextColor="White"
+                                   ReturnCommand="{Binding SendMessageCommand}" />
+                        </syncInput:SfTextInputLayout>
+                        <ImageButton Grid.Column="1"
+                                     Source="https://img.icons8.com/fluent/128/000000/paper-plane.png"
+                                     VerticalOptions="CenterAndExpand"
+                                     HorizontalOptions="CenterAndExpand"
+
+                                     Command="{Binding SendMessageCommand}"
+
+                                     BackgroundColor="Transparent" />
+                    </Grid>
+                </Frame>
+            </Grid>
+
+            <Frame IsVisible="{Binding IsBusy}"
+
+                   AbsoluteLayout.LayoutFlags="All"
+                   AbsoluteLayout.LayoutBounds="0,0,1,1.1"
+
+                   BackgroundColor="{DynamicResource MainBackgroundColor}">
+                <ActivityIndicator HorizontalOptions="CenterAndExpand"
+                                   VerticalOptions="CenterAndExpand"
+
+                                   IsRunning="{Binding IsBusy}"
+
+                                   Color="{StaticResource  SyncPrimaryColor}"
+                                   BackgroundColor="{DynamicResource MainBackgroundColor}" />
+            </Frame>
+        </AbsoluteLayout>
+    </StackLayout>
+</ContentPage>

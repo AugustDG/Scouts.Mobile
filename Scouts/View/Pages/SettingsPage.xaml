@@ -1,0 +1,485 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Scouts.View.Pages.SettingsPage">
+
+    <AbsoluteLayout>
+        <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                     AbsoluteLayout.LayoutFlags="All"
+                     BackgroundColor="{DynamicResource MainBackgroundColor}"
+                     x:Name="MainLayout"
+                     x:FieldModifier="public">
+
+            <Frame Padding="0"
+                   HeightRequest="55"
+                   HasShadow="True"
+                   BackgroundColor="{DynamicResource MainForegroundColor}">
+                <Label Text="RÉGLAGES"
+                       FontSize="25"
+
+                       VerticalOptions="Center"
+                       HorizontalOptions="CenterAndExpand"
+
+                       TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+            </Frame>
+
+            <ScrollView HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand"
+                        
+                        Padding="0, 0, 0, 70">
+                <StackLayout BackgroundColor="Transparent">
+
+                    <!-- Current Info -->
+                    <Frame Padding="0"
+                           Margin="24, 12, 24, 6"
+                           CornerRadius="7"
+                           HasShadow="True"
+
+                           BorderColor="Transparent"
+                           BackgroundColor="{DynamicResource MainForegroundColor}">
+                        <StackLayout>
+
+                            <StackLayout Orientation="Horizontal"
+                                         Margin="18, 15, 18, 15">
+                                <Label Text="NOM D'UTILISATEUR"
+                                       FontSize="15"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Start"
+
+                                       TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+
+                                <Label Text="{Binding NewUsername}"
+                                       FontSize="13"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="End"
+                                       
+                                       HorizontalOptions="FillAndExpand"
+
+                                       TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal"
+                                         Margin="18, 0, 18, 15">
+                                <Label Text="COULEUR"
+                                       FontSize="15"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Start"
+
+                                       TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+
+                                <Ellipse HeightRequest="15"
+                                         WidthRequest="55"
+                                         
+                                         HorizontalOptions="EndAndExpand"
+                                         VerticalOptions="CenterAndExpand"
+
+                                         StrokeThickness="0"
+                                         BackgroundColor="{DynamicResource UserColor}" />
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- Account -->
+                    <Frame Padding="0"
+                           Margin="12, 12, 12, 6"
+                           CornerRadius="7"
+                           HasShadow="True"
+
+                           BorderColor="Transparent"
+                           BackgroundColor="{DynamicResource MainForegroundColor}">
+                        <Expander ExpandAnimationEasing="{x:Static Easing.SinOut}"
+                                  CollapseAnimationEasing="{x:Static Easing.SinIn}"
+                                  ExpandAnimationLength="200"
+                                  CollapseAnimationLength="100"
+
+                                  Tapped="AccExpander_OnTapped">
+                            <Expander.Header>
+                                <StackLayout Orientation="Horizontal"
+                                             HorizontalOptions="FillAndExpand"
+                                             VerticalOptions="CenterAndExpand">
+                                    <Label Text="COMPTE"
+                                           TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+                                           FontSize="20"
+
+                                           Margin="13, 15, 0, 15"
+
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Start" />
+                                    <Image x:Name="AccExpanderImg"
+                                           Source="@drawable/expand_arrow.png"
+                                           Scale=".8"
+                                           Margin="0, 0, 15, 0"
+                                           HorizontalOptions="EndAndExpand" />
+                                </StackLayout>
+                            </Expander.Header>
+                            <StackLayout Margin="0, 0, 0, 10">
+                                <Frame Margin="15, 7, 15, 2"
+                                       CornerRadius="5"
+                                       Padding="15, 5, 10, 5"
+
+                                       BackgroundColor="{DynamicResource SecondaryForegroundColor}">
+                                    <StackLayout>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Sauvegarder nom d'utilisateur"
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <CheckBox IsChecked="{Binding IsSaveUsernameCheck, Mode=TwoWay}"
+                                                      HorizontalOptions="EndAndExpand"
+                                                      Color="{DynamicResource SyncPrimaryForegroundColor}" />
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Rentrer automatiquement"
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <CheckBox IsChecked="{Binding IsLoginAutomaticCheck, Mode=TwoWay}"
+                                                      HorizontalOptions="EndAndExpand"
+                                                      Color="{DynamicResource SyncPrimaryForegroundColor}" />
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+
+                                <Button Text="Changer nom d'utilisateur"
+                                        FontSize="20"
+
+                                        Margin="15, 7, 15, 3"
+                                        CornerRadius="5"
+                                        Padding="0"
+
+                                        Command="{Binding ChangeUsernameCommand}"
+
+                                        TextColor="{StaticResource SyncPrimaryForegroundColor}"
+                                        BackgroundColor="{DynamicResource SecondaryForegroundColor}" />
+                                <Button Text="Changer mot de passe"
+                                        FontSize="20"
+
+                                        Margin="15, 3, 15, 7"
+                                        CornerRadius="5"
+                                        Padding="0"
+
+                                        Command="{Binding ChangePasswordCommand}"
+
+                                        TextColor="{StaticResource SyncPrimaryForegroundColor}"
+                                        BackgroundColor="{DynamicResource SecondaryForegroundColor}" />
+                            </StackLayout>
+                        </Expander>
+                    </Frame>
+                    
+                    <!-- Notifications -->
+                    <Frame Padding="0"
+                           Margin="12, 6, 12, 6"
+                           CornerRadius="7"
+                           HasShadow="True"
+
+                           BorderColor="Transparent"
+                           BackgroundColor="{DynamicResource MainForegroundColor}">
+                        <Expander ExpandAnimationEasing="{x:Static Easing.SinOut}"
+                                  CollapseAnimationEasing="{x:Static Easing.SinIn}"
+                                  ExpandAnimationLength="200"
+                                  CollapseAnimationLength="100"
+
+                                  Tapped="NotifExpander_OnTapped">
+                            <Expander.Header>
+                                <StackLayout Orientation="Horizontal"
+                                             HorizontalOptions="FillAndExpand"
+                                             VerticalOptions="CenterAndExpand">
+                                    <Label Text="NOTIFICATIONS"
+                                           TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+                                           FontSize="20"
+
+                                           Margin="13, 15, 0, 15"
+
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Start" />
+                                    <Image x:Name="NotifExpanderImg"
+                                           Source="@drawable/expand_arrow.png"
+                                           Scale=".8"
+                                           Margin="0, 0, 15, 0"
+                                           HorizontalOptions="EndAndExpand" />
+                                </StackLayout>
+                            </Expander.Header>
+                            <StackLayout Margin="0, 0, 0, 10">
+                                <Frame Margin="15, 7, 15, 2"
+                                       CornerRadius="5"
+                                       Padding="15, 5, 10, 5"
+
+                                       BackgroundColor="{DynamicResource SecondaryForegroundColor}">
+                                    <StackLayout>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Toutes les notifications"
+                                                   FontSize="16"
+                                                   
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <Switch IsToggled="{Binding Path=AllNotificationsChecked, Mode=TwoWay}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Toggled="N_Switch_OnToggled"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Margin="15, 7, 15, 2"
+                                       CornerRadius="5"
+                                       Padding="15, 5, 10, 5"
+
+                                       BackgroundColor="{DynamicResource SecondaryForegroundColor}">
+                                    <StackLayout>
+                                        <Label Text="Infos"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               
+                                               Margin="0, 5, 0, 0"
+                                               HorizontalOptions="StartAndExpand"
+                                               VerticalOptions="CenterAndExpand"
+
+                                               HorizontalTextAlignment="Start"
+                                               VerticalTextAlignment="Center"
+
+                                               TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                        
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Chefs"
+                                                   
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <Switch IsToggled="{Binding Path=NotificationSubscriptions[0], Mode=TwoWay}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Toggled="SwitchArray_OnToggled"/>
+                                        </StackLayout>
+                                        
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Clan"
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <Switch IsToggled="{Binding Path=NotificationSubscriptions[1], Mode=TwoWay}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Toggled="SwitchArray_OnToggled"/>
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Éclaireurs"
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <Switch IsToggled="{Binding Path=NotificationSubscriptions[2], Mode=TwoWay}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Toggled="SwitchArray_OnToggled"/>
+                                        </StackLayout>
+                                        
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Guides"
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <Switch IsToggled="{Binding Path=NotificationSubscriptions[3], Mode=TwoWay}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Toggled="SwitchArray_OnToggled"/>
+                                        </StackLayout>
+                                        
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Louvettes"
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <Switch IsToggled="{Binding Path=NotificationSubscriptions[4], Mode=TwoWay}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Toggled="SwitchArray_OnToggled"/>
+                                        </StackLayout>
+                                        
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Louveteux"
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <Switch IsToggled="{Binding Path=NotificationSubscriptions[5], Mode=TwoWay}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Toggled="SwitchArray_OnToggled"/>
+                                        </StackLayout>
+                                        
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Castors"
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <Switch IsToggled="{Binding Path=NotificationSubscriptions[6], Mode=TwoWay}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Toggled="SwitchArray_OnToggled"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Margin="15, 7, 15, 2"
+                                       CornerRadius="5"
+                                       Padding="15, 5, 10, 5"
+
+                                       BackgroundColor="{DynamicResource SecondaryForegroundColor}">
+                                    <StackLayout>
+                                        <Label Text="Messages"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               
+                                               Margin="0, 5, 0, 0"
+                                               HorizontalOptions="StartAndExpand"
+                                               VerticalOptions="CenterAndExpand"
+
+                                               HorizontalTextAlignment="Start"
+                                               VerticalTextAlignment="Center"
+
+                                               TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                        
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Tous"
+                                                   
+                                                   HorizontalOptions="StartAndExpand"
+                                                   VerticalOptions="CenterAndExpand"
+
+                                                   HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+
+                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
+                                            <Switch IsToggled="{Binding Path=NotificationSubscriptions[7], Mode=TwoWay}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Toggled="SwitchArray_OnToggled"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </Expander>
+                    </Frame>
+
+                    <!-- Personalization -->
+                    <Frame Padding="0"
+                           Margin="12, 6, 12, 12"
+                           CornerRadius="7"
+                           HasShadow="True"
+
+                           BorderColor="Transparent"
+                           BackgroundColor="{DynamicResource MainForegroundColor}">
+                        <Expander ExpandAnimationEasing="{x:Static Easing.SinOut}"
+                                  CollapseAnimationEasing="{x:Static Easing.SinIn}"
+                                  ExpandAnimationLength="200"
+                                  CollapseAnimationLength="100"
+
+                                  Tapped="PersExpander_OnTapped">
+                            <Expander.Header>
+                                <StackLayout Orientation="Horizontal"
+                                             HorizontalOptions="FillAndExpand"
+                                             VerticalOptions="CenterAndExpand">
+                                    <Label Text="PERSONALISATION"
+                                           TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+                                           FontSize="20"
+
+                                           Margin="13, 15, 0, 15"
+
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Start" />
+                                    <Image x:Name="PersExpanderImg"
+                                           Source="@drawable/expand_arrow.png"
+                                           Scale=".8"
+                                           Margin="0, 0, 15, 0"
+                                           HorizontalOptions="EndAndExpand" />
+                                </StackLayout>
+                            </Expander.Header>
+                            <StackLayout Margin="0, 0, 0, 10">
+                                <Button Text="Couleur Perso."
+                                        FontSize="20"
+
+                                        Margin="15, 7, 15, 3"
+                                        CornerRadius="5"
+                                        Padding="0"
+
+                                        Command="{Binding ShowColorPickerCommand}"
+
+                                        TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+                                        BackgroundColor="{DynamicResource SecondaryForegroundColor}" />
+                            </StackLayout>
+                        </Expander>
+                    </Frame>
+
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+        <Frame AbsoluteLayout.LayoutBounds=".9, 1, 1, .1"
+               AbsoluteLayout.LayoutFlags="All"
+
+               Padding="12"
+               HasShadow="True"
+
+               BackgroundColor="{DynamicResource MainForegroundColor}">
+
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="FillAndExpand">
+                <Button Text="RETOUR"
+                        FontSize="18"
+
+                        Margin="7, 0"
+                        Padding="0"
+                        CornerRadius="10"
+                        HorizontalOptions="FillAndExpand"
+
+                        Command="{Binding ExitSettingsCommand}"
+
+                        TextColor="{StaticResource SyncPrimaryForegroundColor}"
+                        BackgroundColor="{DynamicResource SecondaryForegroundColor}" />
+
+                <Button Text="SAUVEGARDER"
+                        FontSize="18"
+
+                        Padding="0"
+                        Margin="7, 0"
+                        CornerRadius="10"
+                        HorizontalOptions="FillAndExpand"
+
+                        IsVisible="{Binding HasChanges}"
+                        Command="{Binding SaveChangesCommand}"
+
+                        TextColor="{StaticResource SyncPrimaryForegroundColor}"
+                        BackgroundColor="{StaticResource SyncPrimaryColor}" />
+            </StackLayout>
+        </Frame>
+    </AbsoluteLayout>
+</ContentPage>

@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:themes="clr-namespace:Syncfusion.XForms.Themes;assembly=Syncfusion.Core.XForms"
+             xmlns:syncInput="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:syncButtons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             mc:Ignorable="d"
+             x:Class="Scouts.App">
+
+    <Application.Resources>
+        <themes:SyncfusionThemeDictionary>
+            <themes:SyncfusionThemeDictionary.MergedDictionaries>
+                <themes:DarkTheme/>
+                <!-- Theme resource dictionary -->
+                <ResourceDictionary x:Name="DarkThemeResourceDictionary">
+                    
+                    <Color x:Key="UserColor">#fff</Color>
+                    
+                    <Color x:Key="MainBackgroundColor">#1A1A1A</Color>
+                    <Color x:Key="SecondaryBackgroundColor">#252525</Color>
+                    
+                    <Color x:Key="MainForegroundColor">#252525</Color>
+                    <Color x:Key="SecondaryForegroundColor">#2F2F2F</Color>
+                    
+                    <Color x:Key="SyncPrimaryColor">#389e32</Color> <!-- Scheduler:DateSelector -->
+                    <Color x:Key="SyncPrimaryLightColor">#389e32</Color> <!-- Popup:AcceptButtonText -->
+                    <Color x:Key="SyncErrorColor">Red</Color> <!-- Entry:ErrorColor -->
+                    <Color x:Key="SyncPrimaryForegroundColor">White</Color> <!-- Scheduler:DateSelectorNumber -->
+                    <Color x:Key="SyncPrimaryDarkColor">Blue</Color>
+                    <Color x:Key="SyncPrimaryLightForegroundColor">HotPink</Color>
+                    <Color x:Key="SyncPrimaryDarkForegroundColor">Turquoise</Color>
+                    <Color x:Key="SyncSuccessColor">Green</Color>
+                    <Color x:Key="SyncWarningColor">Purple</Color>
+                    <Color x:Key="SyncInfoColor">DarkOrange</Color>
+                    
+                    <!-- Gradient Colors -->
+                    
+                    <Color x:Key="StartColorGradient">#11998e</Color>
+                    <Color x:Key="EndColorGradient">#38ef7d</Color>
+                    
+                    <Style TargetType="syncInput:SfTextInputLayout" x:Key="TextInputStyle">
+                        <Setter Property="ContainerType" Value="Filled"></Setter>
+                        <Setter Property="OutlineCornerRadius" Value="1"></Setter>
+                        <Setter Property="UnfocusedStrokeWidth" Value="3"></Setter>
+                        <Setter Property="FocusedStrokeWidth" Value="2"></Setter>
+                        <Setter Property="BackgroundColor" Value="Transparent"></Setter>
+                        <Setter Property="ContainerBackgroundColor" Value="{DynamicResource MainForegroundColor}"></Setter>
+                        <Setter Property="UnfocusedColor" Value="White"></Setter>
+                        <Setter Property="FocusedColor" Value="White"></Setter>
+                        <Setter Property="Margin" Value="0, 0, 0, 10"></Setter>
+                    </Style>
+                    
+                    <Style TargetType="syncButtons:SfButton" x:Key="ButtonStyle">
+                        <Setter Property="BorderColor" Value="{StaticResource SyncPrimaryColor}"></Setter>
+                        <Setter Property="PressedBackgroundColor" Value="{StaticResource SyncPrimaryColor}"></Setter>
+                        <Setter Property="BackgroundColor" Value="Transparent"></Setter>
+                        <Setter Property="BorderWidth" Value="3"></Setter>
+                        <Setter Property="CornerRadius" Value="2"></Setter>
+                    </Style>
+                    
+                    <Style TargetType="Label" x:Key="ButtonLabelStyle">
+                        <Setter Property="FontSize" Value="15"></Setter>
+                        <Setter Property="TextColor" Value="White"></Setter>
+                        <Setter Property="HorizontalTextAlignment" Value="Center"></Setter>
+                        <Setter Property="VerticalTextAlignment" Value="Center"></Setter>
+                    </Style>
+                    
+                    <Style TargetType="syncButtons:SfCheckBox" x:Key="CheckStyle">
+                        <Setter Property="TextColor" Value="White"></Setter>
+                        <Setter Property="CheckedColor" Value="White"></Setter>
+                        <Setter Property="UncheckedColor" Value="White"></Setter>
+                        <Setter Property="BackgroundColor" Value="Transparent"></Setter>
+                        <Setter Property="CornerRadius" Value="2"></Setter>
+                        <Setter Property="Scale" Value="1.1"></Setter>
+                    </Style>
+                </ResourceDictionary>
+            </themes:SyncfusionThemeDictionary.MergedDictionaries>
+        </themes:SyncfusionThemeDictionary>
+    </Application.Resources>
+    
+</Application>
