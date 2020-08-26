@@ -25,3 +25,19 @@ steps:
     projectFile: '**/*droid*.csproj'
     outputDirectory: '$(outputDirectory)'
     configuration: '$(buildConfiguration)'
+    clean: true
+    msbuildVersionOption: latest
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'Bundles'
+    ArtifactName: 'com.ampstudios.scouts-$(build.buildNumber)'
+    publishLocation: 'Container'
+
+- task: AndroidSigning@3
+  inputs:
+    apkFiles: 'Bundles/*.aab'
+    apksignerKeystoreFile: 'Scouts.keystore'
+    apksignerKeystorePassword: 'aviaolegoA55'
+    apksignerKeystoreAlias: 'Scouts'
+    apksignerKeyPassword: 'aviaolegoA55'
