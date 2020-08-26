@@ -30,7 +30,7 @@ steps:
 
 - task: AndroidSigning@3
   inputs:
-    apkFiles: 'outputDirectory'
+    apkFiles: '$(outputDirectory)'
     apksignerKeystoreFile: 'Scouts.keystore'
     apksignerKeystorePassword: 'aviaolegoA55'
     apksignerKeystoreAlias: 'Scouts'
