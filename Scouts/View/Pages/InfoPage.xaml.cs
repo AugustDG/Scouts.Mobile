@@ -9,7 +9,7 @@ using Xamarin.Forms.Xaml;
 namespace Scouts.View.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class InfoPage
+    public partial class InfoPage : ContentPage
     {
         private InfoPageModel _pageModel;
 

@@ -76,9 +76,9 @@
     <content url="file://$USER_HOME$/.nuget/packages/xamarin.google.android.material/1.0.0.1/proguard/proguard.txt" />
     <content url="file://$USER_HOME$/.nuget/packages/xamarin.googleplayservices.base/71.1610.4/proguard/MonoAndroid90/proguard.txt" />
     <content url="file://$USER_HOME$/.nuget/packages/xamarin.googleplayservices.basement/71.1620.4/proguard/MonoAndroid90/proguard.txt" />
-    <content url="file://$MODULE_DIR$/../.." />
     <content url="file://$MODULE_DIR$/../../../Scouts.Backend" />
     <content url="file://$MODULE_DIR$/../../../Scouts.Helper" />
+    <content url="file://$MODULE_DIR$/../.." />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
