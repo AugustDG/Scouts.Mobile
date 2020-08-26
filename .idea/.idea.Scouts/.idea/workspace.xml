@@ -86,7 +86,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Scouts.Android/Renderers/CustomShellRenderer.cs" />
         <option value="$PROJECT_DIR$/Scouts/View/Controls/CustomFrame.cs" />
         <option value="$PROJECT_DIR$/Scouts.Android/Renderers/CustomFrameRenderer.cs" />
         <option value="$PROJECT_DIR$/Scouts/View/Popups/InfoDetailsPopup.xaml.cs" />
@@ -102,7 +101,6 @@
         <option value="$PROJECT_DIR$/Scouts.Android/Properties/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/Scouts.Android/Dev/Constants.cs" />
         <option value="$PROJECT_DIR$/Scouts.Android/MainActivity.cs" />
-        <option value="$PROJECT_DIR$/Scouts.Android/Scouts.Android.csproj" />
         <option value="$PROJECT_DIR$/Scouts/View/Pages/InfoPage.xaml" />
         <option value="$PROJECT_DIR$/Scouts/View/Pages/SettingsPage.xaml" />
         <option value="$PROJECT_DIR$/Scouts/View/Pages/LoginPage.xaml.cs" />
@@ -137,6 +135,8 @@
         <option value="$PROJECT_DIR$/../Scouts.Helper/Program.cs" />
         <option value="$PROJECT_DIR$/Scouts/View/Pages/InfoPage.xaml.cs" />
         <option value="$PROJECT_DIR$/Scouts/Scouts.csproj" />
+        <option value="$PROJECT_DIR$/Scouts.Android/Scouts.Android.csproj" />
+        <option value="$PROJECT_DIR$/../Scouts.Backend/Scouts.Backend.csproj" />
       </list>
     </option>
   </component>
@@ -304,6 +304,7 @@
       <workItem from="1598363159660" duration="24670000" />
       <workItem from="1598449591738" duration="7370000" />
       <workItem from="1598458505799" duration="1560000" />
+      <workItem from="1598464161018" duration="764000" />
     </task>
     <servers />
   </component>
