@@ -11,7 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  outputDirectory: '$(build.binariesDirectory)/$(buildConfiguration)'
+  outputDirectory: 'Bundles/com.ampstudios.scouts-$(build.buildNumber).aab'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -28,16 +28,16 @@ steps:
     clean: true
     msbuildVersionOption: latest
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: 'Bundles'
-    ArtifactName: 'com.ampstudios.scouts-$(build.buildNumber)'
-    publishLocation: 'Container'
-
 - task: AndroidSigning@3
   inputs:
-    apkFiles: 'Bundles/*.aab'
+    apkFiles: 'outputDirectory'
     apksignerKeystoreFile: 'Scouts.keystore'
     apksignerKeystorePassword: 'aviaolegoA55'
     apksignerKeystoreAlias: 'Scouts'
     apksignerKeyPassword: 'aviaolegoA55'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'Bundles/com.ampstudios.scouts-$(build.buildNumber).aab'
+    ArtifactName: 'com.ampstudios.scouts-$(build.buildNumber)'
+    publishLocation: 'Container'
