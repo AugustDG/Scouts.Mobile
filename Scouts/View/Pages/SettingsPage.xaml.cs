@@ -10,7 +10,7 @@ namespace Scouts.View.Pages
     {
         private SettingsPageModel _pageModel;
         
-        public static SettingsPage Instance { get; set; } = new SettingsPage();
+        public static SettingsPage Instance { get; set; }
         
         public SettingsPage()
         {
@@ -19,6 +19,8 @@ namespace Scouts.View.Pages
             _pageModel = new SettingsPageModel(this);
 
             BindingContext = _pageModel;
+            
+            Instance = this;
         }
 
         private void AccExpander_OnTapped(object sender, EventArgs e)

@@ -61,6 +61,8 @@ namespace Scouts.Droid.Services
             var requestCode = new Random().Next();
             var pendingIntent = PendingIntent.GetActivity(this, requestCode, intent, PendingIntentFlags.OneShot);
 
+            if (!body.Contains("^^^")) return;
+            
             var splitBody = body.Split("^^^", StringSplitOptions.RemoveEmptyEntries);
 
             var notificationBuilder = new Notification.Builder(this, Constants.NotificationChannelName[0]);

@@ -14,7 +14,7 @@ namespace Scouts.Services
         public static async void CreateOrUpdateServerInstallation(List<string> tagsAdd = null,
             List<string> tagsRemove = null)
         {
-            DeviceInstallationModel installationModel = new DeviceInstallationModel
+            var installationModel = new DeviceInstallationModel
             {
                 InstallationId = AppSettings.DeviceInstallation?.InstallationId,
                 PushChannel = AppSettings.PnsId,

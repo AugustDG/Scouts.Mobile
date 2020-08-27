@@ -207,7 +207,7 @@ namespace Scouts.ViewModels
             }
         }
 
-        private async void SubmitPassSignIn()
+        private void SubmitPassSignIn()
         {
             IsBusy = true;
 
@@ -249,6 +249,7 @@ namespace Scouts.ViewModels
 
                 InstallationService.CreateOrUpdateServerInstallation(new List<string>()
                 {
+                    "default",
                     $"UserId:{AppSettings.CurrentUser.UserId}",
                     $"UserType:{AppSettings.CurrentUser.UserType.ToString()}"
                 });
@@ -362,6 +363,7 @@ namespace Scouts.ViewModels
 
                 InstallationService.CreateOrUpdateServerInstallation(new List<string>()
                 {
+                    "default",
                     $"UserId:{AppSettings.CurrentUser.UserId}",
                     $"UserType:{AppSettings.CurrentUser.UserType.ToString()}"
                 });

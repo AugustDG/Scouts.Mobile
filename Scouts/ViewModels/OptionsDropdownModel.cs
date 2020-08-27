@@ -60,8 +60,8 @@ namespace Scouts.ViewModels
 
         public void RefreshUsername()
         {
-            CurrentUsername = AppSettings.CurrentUser?.Username.ToUpper();
-            CurrentUserType = AppSettings.CurrentUser?.UserType.ToString().ToUpper();
+            CurrentUsername = AppSettings.CurrentUser.Username.ToUpper();
+            CurrentUserType = AppSettings.CurrentUser.UserType.ToString().ToUpper();
             UserColor = AppSettings.CurrentUser?.Color ?? Color.Accent;
 
             OnPropertyChanged(nameof(CurrentUsername));
@@ -70,24 +70,24 @@ namespace Scouts.ViewModels
 
         private async void ShowSettingsPage()
         {
-            SettingsPage.Instance ??= new SettingsPage();
-            
-            await Shell.Current.Navigation.PushModalAsync(new SettingsPage());
+            var settingsPage = new SettingsPage();
+
+            await Shell.Current.Navigation.PushModalAsync(settingsPage);
         }
 
         private async void Disconnect()
         {
-            if (!AppSettings.IsSaveUsername) AppSettings.CurrentUser.Username = null;
+            if (!AppSettings.IsSaveUsername) AppSettings.CurrentUser.Username = null!;
 
             DependencyService.Get<IDroidMessagingService>().WipeToken();
-            InstallationService.DeleteServerInstallation();
+            //InstallationService.DeleteServerInstallation(); 
 
             AppSettings.IsLoginAutomatic = false;
-            AppSettings.CurrentUser.Password = null;
-            AppSettings.CurrentUser.UserId = null;
-            AppSettings.DeviceInstallation.Tags = null;
-            AppSettings.DeviceInstallation.Platform = null;
-            AppSettings.DeviceInstallation.PushChannel = null;
+            AppSettings.CurrentUser.Password = null!;
+            AppSettings.CurrentUser.UserId = null!;
+            AppSettings.DeviceInstallation.Tags = null!;
+            AppSettings.DeviceInstallation.Platform = null!;
+            AppSettings.DeviceInstallation.PushChannel = null!;
             
             AppSettings.QueueClearSavedObjects(new []{nameof(AppSettings.CurrentUser), nameof(AppSettings.SavedNotificationSubscriptions)});
             AppSettings.QueueSaveChangedObjects(new [] {nameof(AppSettings.DeviceInstallation)});
