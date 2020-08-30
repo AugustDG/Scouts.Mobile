@@ -1,300 +1,290 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<popup:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                 xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
-                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
-                 xmlns:syncButtons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
-                 xmlns:syncInput="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
-                 xmlns:converter="clr-namespace:Scouts.Converters;assembly=Scouts"
-                 x:Class="Scouts.View.Popups.AddItemPopup"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             xmlns:syncButtons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:syncInput="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:converter="clr-namespace:Scouts.Converters;assembly=Scouts"
+             x:Class="Scouts.View.Popups.AddItemPopup"
+             Opacity="0"
+             Scale="1.2"
+             BackgroundColor="{DynamicResource MainBackgroundColor}">
 
-                 HasKeyboardOffset="False"
-                 HasSystemPadding="False"
-                 CloseWhenBackgroundIsClicked="False"
-                 Opacity="0"
-                 Scale="1.2">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition Width="0.4*" />
+            <ColumnDefinition Width="0.6*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.08*" />
+            <RowDefinition Height="0.8*" />
+            <RowDefinition Height="0.12*" />
+        </Grid.RowDefinitions>
 
-    <Frame Margin="10, 15, 10, 15"
-           Padding="10, 20, 10, 20"
-           CornerRadius="5"
-           BackgroundColor="{DynamicResource MainBackgroundColor}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.3*" />
-                <ColumnDefinition Width="0.4*" />
-                <ColumnDefinition Width="0.6*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.06*" />
-                <RowDefinition Height="0.82*" />
-                <RowDefinition Height="0.12*" />
-            </Grid.RowDefinitions>
+        <Label Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"
+               Text="NOUVEL ARTICLE"
+               TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+               FontSize="25"
 
-            <Label Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"
-                   Text="NOUVEAU"
-                   TextColor="{DynamicResource SyncPrimaryForegroundColor}"
-                   FontSize="25"
+               Margin="0, 15, 0, 0"
+               HorizontalOptions="CenterAndExpand" />
 
-                   HorizontalOptions="CenterAndExpand" />
+        <ScrollView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+            <StackLayout>
+                <Frame Padding="0"
+                       Margin="12, 12, 12, 6"
+                       CornerRadius="7"
+                       HasShadow="True"
 
-            <ScrollView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
-                <StackLayout>
-                    <Frame Padding="0"
-                           Margin="12, 12, 12, 6"
-                           CornerRadius="7"
-                           HasShadow="True"
+                       BorderColor="Transparent"
+                       BackgroundColor="{DynamicResource MainForegroundColor}">
+                    <Expander ExpandAnimationEasing="{x:Static Easing.SinOut}"
+                              CollapseAnimationEasing="{x:Static Easing.SinIn}"
+                              ExpandAnimationLength="200"
+                              CollapseAnimationLength="100"
 
-                           BorderColor="Transparent"
-                           BackgroundColor="{DynamicResource MainForegroundColor}">
-                        <Expander ExpandAnimationEasing="{x:Static Easing.SinOut}"
-                                  CollapseAnimationEasing="{x:Static Easing.SinIn}"
-                                  ExpandAnimationLength="200"
-                                  CollapseAnimationLength="100"
+                              IsExpanded="True"
 
-                                  IsExpanded="True"
+                              Tapped="ContentExpander_OnTapped">
 
-                                  Tapped="ContentExpander_OnTapped">
+                        <Expander.Header>
+                            <StackLayout Orientation="Horizontal"
+                                         HorizontalOptions="FillAndExpand"
+                                         VerticalOptions="CenterAndExpand">
+                                <Label Text="CONTENU"
+                                       TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+                                       FontSize="20"
 
-                            <Expander.Header>
-                                <StackLayout Orientation="Horizontal"
-                                             HorizontalOptions="FillAndExpand"
-                                             VerticalOptions="CenterAndExpand">
-                                    <Label Text="CONTENU"
-                                           TextColor="{DynamicResource SyncPrimaryForegroundColor}"
-                                           FontSize="20"
+                                       Margin="13, 15, 0, 15"
 
-                                           Margin="13, 15, 0, 15"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Start" />
+                                <Image x:Name="ContentExpanderImg"
+                                       Source="@drawable/expand_arrow.png"
+                                       Scale=".8"
 
-                                           VerticalTextAlignment="Center"
-                                           HorizontalTextAlignment="Start" />
-                                    <Image x:Name="ContentExpanderImg"
-                                           Source="@drawable/expand_arrow.png"
-                                           Scale=".8"
+                                       Rotation="180"
 
-                                           Rotation="180"
-
-                                           HorizontalOptions="EndAndExpand"
-                                           Margin="0, 0, 15, 0" />
-                                </StackLayout>
-                            </Expander.Header>
-
-                            <StackLayout Margin="0, 0, 0, 10">
-                                <syncInput:SfTextInputLayout Style="{DynamicResource TextInputStyle}"
-                                                             ContainerBackgroundColor="{DynamicResource SecondaryForegroundColor}"
-
-                                                             Hint="Titre"
-                                                             IsHintAlwaysFloated="False"
-                                                             CharMaxLength="50"
-                                                             ShowCharCount="True"
-
-                                                             Margin="20, 0, 20, 0">
-
-                                    <Entry Text="{Binding PostTitle, Mode=TwoWay}"
-                                           TextColor="White"
-                                           ReturnCommand="{Binding FinishedTitleCommand}" />
-                                </syncInput:SfTextInputLayout>
-
-                                <syncInput:SfTextInputLayout Style="{DynamicResource TextInputStyle}"
-                                                             ContainerBackgroundColor="{DynamicResource SecondaryForegroundColor}"
-
-                                                             Hint="Contenu"
-                                                             IsHintAlwaysFloated="True"
-                                                             CharMaxLength="500"
-                                                             ShowCharCount="True"
-
-                                                             Margin="20, 0, 20, 0">
-
-                                    <Editor Text="{Binding PostContent, Mode=TwoWay}"
-                                            x:Name="ContentEntry"
-                                            TextColor="White"
-                                            AutoSize="Disabled"
-                                            HeightRequest="150" />
-                                </syncInput:SfTextInputLayout>
-
-                                <Grid HeightRequest="40">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.4*" />
-                                        <ColumnDefinition Width="0.2*" />
-                                        <ColumnDefinition Width="0.4*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Picker Grid.ColumnSpan="2"
-                                            Title="Type de documents"
-                                            TitleColor="{DynamicResource SyncPrimaryForegroundColor}"
-                                            SelectedIndex="{Binding InfoAttachType, Mode=TwoWay}"
-                                            Margin="15, -10, 15, 0"
-
-                                            HorizontalOptions="FillAndExpand">
-                                        <Picker.ItemsSource>
-                                            <x:Array Type="{x:Type x:String}">
-                                                <x:String>Rien</x:String>
-                                                <x:String>Image</x:String>
-                                                <x:String>Document Écrit</x:String>
-                                                <x:String>Image + Document Écrit</x:String>
-                                            </x:Array>
-                                        </Picker.ItemsSource>
-                                    </Picker>
-
-                                    <ImageButton Grid.Column="2"
-                                                 Source="{Binding ButtonImage, Mode=TwoWay}"
-
-                                                 IsVisible="{Binding HasFile}"
-
-                                                 Margin="{Binding ButtonMargin}"
-                                                 CornerRadius="5"
-                                                 HorizontalOptions="End"
-
-                                                 Command="{Binding PickCommand}"
-
-                                                 BackgroundColor="{DynamicResource SecondaryForegroundColor}" />
-
-                                    <ImageButton Grid.Column="2"
-                                                 Source="{Binding ButtonImageDoc}"
-
-                                                 IsVisible="{Binding HasImgDoc}"
-
-                                                 Margin="0, 0, 25, 0"
-                                                 CornerRadius="5"
-                                                 HorizontalOptions="End"
-
-                                                 Command="{Binding PickDocumentCommand}"
-
-                                                 BackgroundColor="{DynamicResource SecondaryForegroundColor}" />
-                                </Grid>
+                                       HorizontalOptions="EndAndExpand"
+                                       Margin="0, 0, 15, 0" />
                             </StackLayout>
-                        </Expander>
-                    </Frame>
+                        </Expander.Header>
 
-                    <Frame Padding="0"
-                           Margin="12, 6, 12, 12"
-                           CornerRadius="7"
-                           HasShadow="True"
+                        <StackLayout Margin="0, 0, 0, 10">
+                            <syncInput:SfTextInputLayout Style="{DynamicResource TextInputStyle}"
+                                                         ContainerBackgroundColor="{DynamicResource SecondaryForegroundColor}"
 
-                           BorderColor="Transparent"
-                           BackgroundColor="{DynamicResource MainForegroundColor}">
-                        <Expander ExpandAnimationEasing="{x:Static Easing.SinOut}"
-                                  CollapseAnimationEasing="{x:Static Easing.SinIn}"
-                                  ExpandAnimationLength="200"
-                                  CollapseAnimationLength="100"
+                                                         Hint="Titre"
+                                                         IsHintAlwaysFloated="False"
+                                                         CharMaxLength="50"
+                                                         ShowCharCount="True"
 
-                                  Tapped="DeetsExpander_OnTapped">
+                                                         Margin="10, 0, 10, 0">
 
-                            <Expander.Header>
-                                <StackLayout Orientation="Horizontal"
-                                             HorizontalOptions="FillAndExpand"
-                                             VerticalOptions="CenterAndExpand">
-                                    <Label Text="DÉTAILS"
-                                           TextColor="{DynamicResource SyncPrimaryForegroundColor}"
-                                           FontSize="20"
+                                <Entry Text="{Binding PostTitle, Mode=TwoWay}"
+                                       TextColor="White"
+                                       ReturnCommand="{Binding FinishedTitleCommand}" />
+                            </syncInput:SfTextInputLayout>
 
-                                           Margin="13, 15, 0, 15"
+                            <syncInput:SfTextInputLayout Style="{DynamicResource TextInputStyle}"
+                                                         ContainerBackgroundColor="{DynamicResource SecondaryForegroundColor}"
 
-                                           VerticalTextAlignment="Center"
-                                           HorizontalTextAlignment="Start" />
-                                    <Image x:Name="DeetsExpanderImg"
-                                           Source="@drawable/expand_arrow.png"
-                                           Scale=".8"
-                                           Margin="0, 0, 15, 0"
-                                           HorizontalOptions="EndAndExpand" />
-                                </StackLayout>
-                            </Expander.Header>
+                                                         Hint="Contenu"
+                                                         IsHintAlwaysFloated="True"
+                                                         CharMaxLength="5000"
+                                                         ShowCharCount="True"
 
-                            <StackLayout Margin="0, 0, 0, 10">
-                                <Picker Title="Public concerné"
+                                                         Margin="10, 0, 10, 0">
+
+                                <Editor Text="{Binding PostContent, Mode=TwoWay}"
+                                        x:Name="ContentEntry"
+                                        TextColor="White"
+                                        AutoSize="TextChanges"
+                                        HeightRequest="250" />
+                            </syncInput:SfTextInputLayout>
+
+                            <Grid HeightRequest="40">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.4*" />
+                                    <ColumnDefinition Width="0.2*" />
+                                    <ColumnDefinition Width="0.4*" />
+                                </Grid.ColumnDefinitions>
+                                <Picker Grid.ColumnSpan="2"
+                                        Title="Type de documents"
                                         TitleColor="{DynamicResource SyncPrimaryForegroundColor}"
-                                        SelectedIndex="{Binding InfoPublicType}"
-                                        Margin="15, 0, 15, 0"
+                                        SelectedIndex="{Binding InfoAttachType, Mode=TwoWay}"
+                                        Margin="15, -10, 15, 0"
 
                                         HorizontalOptions="FillAndExpand">
                                     <Picker.ItemsSource>
                                         <x:Array Type="{x:Type x:String}">
-                                            <x:String>Chefs</x:String>
-                                            <x:String>Clan</x:String>
-                                            <x:String>Eclaireurs</x:String>
-                                            <x:String>Guides</x:String>
-                                            <x:String>Louvettes</x:String>
-                                            <x:String>Louveteaux</x:String>
-                                            <x:String>Castors</x:String>
-                                            <x:String>Tous</x:String>
+                                            <x:String>Rien</x:String>
+                                            <x:String>Image</x:String>
+                                            <x:String>Document Écrit</x:String>
+                                            <x:String>Image + Document Écrit</x:String>
                                         </x:Array>
                                     </Picker.ItemsSource>
                                 </Picker>
 
-                                <Picker Title="Type d'évènement"
-                                        TitleColor="{DynamicResource SyncPrimaryForegroundColor}"
-                                        SelectedIndex="{Binding InfoEventType}"
-                                        Margin="15, 0, 15, 0"
+                                <ImageButton Grid.Column="2"
+                                             Source="{Binding ButtonImage, Mode=TwoWay}"
 
-                                        HorizontalOptions="FillAndExpand">
-                                    <Picker.ItemsSource>
-                                        <x:Array Type="{x:Type x:String}">
-                                            <x:String>Camp</x:String>
-                                            <x:String>Réunion</x:String>
-                                            <x:String>Évènement</x:String>
-                                            <x:String>Infos</x:String>
-                                        </x:Array>
-                                    </Picker.ItemsSource>
-                                </Picker>
+                                             IsVisible="{Binding HasFile}"
 
-                                <syncButtons:SfCheckBox IsChecked="{Binding IsUrgent}"
-                                                        Text="Urgent?"
+                                             Margin="{Binding ButtonMargin}"
+                                             CornerRadius="5"
+                                             HorizontalOptions="End"
 
-                                                        Style="{StaticResource CheckStyle}"
+                                             Command="{Binding PickCommand}"
 
-                                                        Margin="30, 0, 0, 0" />
+                                             BackgroundColor="{DynamicResource SecondaryForegroundColor}" />
+
+                                <ImageButton Grid.Column="2"
+                                             Source="{Binding ButtonImageDoc}"
+
+                                             IsVisible="{Binding HasImgDoc}"
+
+                                             Margin="0, 0, 25, 0"
+                                             CornerRadius="5"
+                                             HorizontalOptions="End"
+
+                                             Command="{Binding PickDocumentCommand}"
+
+                                             BackgroundColor="{DynamicResource SecondaryForegroundColor}" />
+                            </Grid>
+                        </StackLayout>
+                    </Expander>
+                </Frame>
+
+                <Frame Padding="0"
+                       Margin="12, 6, 12, 12"
+                       CornerRadius="7"
+                       HasShadow="True"
+
+                       BorderColor="Transparent"
+                       BackgroundColor="{DynamicResource MainForegroundColor}">
+                    <Expander ExpandAnimationEasing="{x:Static Easing.SinOut}"
+                              CollapseAnimationEasing="{x:Static Easing.SinIn}"
+                              ExpandAnimationLength="200"
+                              CollapseAnimationLength="100"
+
+                              Tapped="DeetsExpander_OnTapped">
+
+                        <Expander.Header>
+                            <StackLayout Orientation="Horizontal"
+                                         HorizontalOptions="FillAndExpand"
+                                         VerticalOptions="CenterAndExpand">
+                                <Label Text="DÉTAILS"
+                                       TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+                                       FontSize="20"
+
+                                       Margin="13, 15, 0, 15"
+
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Start" />
+                                <Image x:Name="DeetsExpanderImg"
+                                       Source="@drawable/expand_arrow.png"
+                                       Scale=".8"
+                                       Margin="0, 0, 15, 0"
+                                       HorizontalOptions="EndAndExpand" />
                             </StackLayout>
-                        </Expander>
-                    </Frame>
+                        </Expander.Header>
+
+                        <StackLayout Margin="0, 0, 0, 10">
+                            <Picker Title="Public concerné"
+                                    TitleColor="{DynamicResource SyncPrimaryForegroundColor}"
+                                    SelectedIndex="{Binding InfoPublicType}"
+                                    Margin="15, 0, 15, 0"
+
+                                    HorizontalOptions="FillAndExpand">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Chefs</x:String>
+                                        <x:String>Clan</x:String>
+                                        <x:String>Eclaireurs</x:String>
+                                        <x:String>Guides</x:String>
+                                        <x:String>Louvettes</x:String>
+                                        <x:String>Louveteaux</x:String>
+                                        <x:String>Castors</x:String>
+                                        <x:String>Tous</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+
+                            <Picker Title="Type d'évènement"
+                                    TitleColor="{DynamicResource SyncPrimaryForegroundColor}"
+                                    SelectedIndex="{Binding InfoEventType}"
+                                    Margin="15, 0, 15, 0"
+
+                                    HorizontalOptions="FillAndExpand">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Camp</x:String>
+                                        <x:String>Réunion</x:String>
+                                        <x:String>Évènement</x:String>
+                                        <x:String>Infos</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+
+                            <syncButtons:SfCheckBox IsChecked="{Binding IsUrgent}"
+                                                    Text="Urgent?"
+
+                                                    Style="{StaticResource CheckStyle}"
+
+                                                    Margin="30, 0, 0, 0" />
+                        </StackLayout>
+                    </Expander>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+
+        <syncButtons:SfButton Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                              Command="{Binding SubmitNewsCommand}"
+
+                              CornerRadius="5"
+
+                              Margin="10, 0, 20, 20">
+            <syncButtons:SfButton.Content>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                       IsVisible="{Binding IsBusy}"
+
+                                       Color="{StaticResource SyncPrimaryForegroundColor}" />
+                    <Label Text="ENVOYER"
+                           FontSize="18"
+                           IsVisible="{Binding IsNotBusy}"
+
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center"
+
+                           TextColor="{StaticResource SyncPrimaryForegroundColor}" />
                 </StackLayout>
-            </ScrollView>
+            </syncButtons:SfButton.Content>
+        </syncButtons:SfButton>
 
-            <syncButtons:SfButton Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
-                                  Command="{Binding SubmitNewsCommand}"
+        <syncButtons:SfButton Grid.Row="2" Grid.Column="0"
+                              Command="{Binding CancelCommand}"
 
-                                  CornerRadius="5"
+                              CornerRadius="5"
 
-                                  Margin="10, 0, 20, 20">
-                <syncButtons:SfButton.Content>
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                        <ActivityIndicator IsRunning="True"
-                                           IsVisible="{Binding IsBusy}"
-                                           Style="{DynamicResource BusyIndicatorLabelStyle}" />
-                        <Label Text="ENVOYER"
-                               FontSize="18"
-                               IsEnabled="{Binding IsNotBusy}"
+                              BackgroundColor="{StaticResource SyncErrorColor}"
 
-                               HorizontalTextAlignment="Center"
-                               VerticalTextAlignment="Center"
-
-                               TextColor="{StaticResource SyncPrimaryForegroundColor}" />
-                    </StackLayout>
-                </syncButtons:SfButton.Content>
-            </syncButtons:SfButton>
-
-            <syncButtons:SfButton Grid.Row="2" Grid.Column="0"
-                                  Command="{Binding CancelCommand}"
-
-                                  CornerRadius="5"
-
-                                  BackgroundColor="{StaticResource SyncErrorColor}"
-
-                                  Margin="20, 0, 10, 20">
-                <syncButtons:SfButton.Content>
-                    <StackLayout>
-                        <ActivityIndicator IsRunning="{Binding IsBusy}"
-                                           IsVisible="{Binding IsBusy}"
-
-                                           Color="{StaticResource SyncPrimaryForegroundColor}" />
-                        <Label Text="×"
-                               Padding="0, -4, 0, 0"
-                               FontSize="35"
-                               HorizontalOptions="CenterAndExpand"
-                               VerticalOptions="CenterAndExpand"
-                               Style="{DynamicResource ButtonLabelStyle}"
-                               IsEnabled="{Binding IsNotBusy}" />
-                    </StackLayout>
-                </syncButtons:SfButton.Content>
-            </syncButtons:SfButton>
-        </Grid>
-    </Frame>
-</popup:PopupPage>
+                              Margin="20, 0, 10, 20">
+            <syncButtons:SfButton.Content>
+                <StackLayout>
+                    <Label Text="×"
+                           Padding="0, -4, 0, 0"
+                           FontSize="35"
+                           HorizontalOptions="CenterAndExpand"
+                           VerticalOptions="CenterAndExpand"
+                           Style="{DynamicResource ButtonLabelStyle}"
+                           IsEnabled="{Binding IsNotBusy}" />
+                </StackLayout>
+            </syncButtons:SfButton.Content>
+        </syncButtons:SfButton>
+    </Grid>
+</ContentPage>

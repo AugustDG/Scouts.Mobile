@@ -41,8 +41,8 @@ namespace Scouts.Dev
         /// <returns></returns>
         public static string GenerateRandomString(int mult)
         {
-            string path = String.Empty;
-            for (int i = 0; i < mult; i++)
+            var path = String.Empty;
+            for (var i = 0; i < mult; i++)
             {
                 path += Path.GetRandomFileName();
             }
@@ -66,9 +66,9 @@ namespace Scouts.Dev
         /// <returns></returns>
         public static ObservableCollection<bool> LoadPreferencesArray(string arrayName, int capacity)
         {
-            ObservableCollection<bool> array = new ObservableCollection<bool>(new bool[capacity]);
+            var array = new ObservableCollection<bool>(new bool[capacity]);
 
-            for (int i = 0; i < capacity; i++)
+            for (var i = 0; i < capacity; i++)
             {
                 array[i] = Preferences.Get($"{arrayName}.{i}", false);
             }
@@ -82,7 +82,7 @@ namespace Scouts.Dev
         /// <returns></returns>
         public static void SavesPreferencesArray(string arrayName, ObservableCollection<bool> array)
         {
-            for (int i = 0; i < array.Count; i++)
+            for (var i = 0; i < array.Count; i++)
             {
                 Preferences.Set($"{arrayName}.{i}", array[i]);
             }

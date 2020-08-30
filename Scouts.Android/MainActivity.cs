@@ -81,8 +81,8 @@ namespace Scouts.Droid
             {
                 if ((resultCode == Result.Ok) && (intent != null))
                 {
-                    Android.Net.Uri uri = intent.Data;
-                    Stream stream = ContentResolver.OpenInputStream(uri);
+                    var uri = intent.Data;
+                    var stream = ContentResolver.OpenInputStream(uri);
 
                     // Set the Stream as the completion of the Task
                     PickImageTaskCompletionSource.SetResult(stream);
@@ -107,7 +107,7 @@ namespace Scouts.Droid
 
         bool IsPlayServiceAvailable()
         {
-            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
+            var resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
             if (resultCode != ConnectionResult.Success)
             {
                 if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))

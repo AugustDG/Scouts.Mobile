@@ -10,8 +10,8 @@
         {
             //Parse Connectionstring
             char[] separator = { ';' };
-            string[] parts = connectionString.Split(separator);
-            for (int i = 0; i < parts.Length; i++)
+            var parts = connectionString.Split(separator);
+            for (var i = 0; i < parts.Length; i++)
             {
                 if (parts[i].StartsWith("Endpoint"))
                     Endpoint = "https" + parts[i].Substring(11);

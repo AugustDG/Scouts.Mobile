@@ -110,6 +110,7 @@ namespace Scouts.ViewModels
             AppEvents.WipeAllUserData += WipeAllData;
 
             _filterPopup ??= new FilterPopup {BindingContext = this};
+            _addItemPopup ??= new AddItemPopup(this);
         }
 
         private void ToggleSearch()
@@ -226,7 +227,7 @@ namespace Scouts.ViewModels
 
         private async Task GetInfoImages(InfoModel model)
         {
-            string path = string.Empty;
+            var path = string.Empty;
             try
             {
                 var folderName = model.id.ToString();

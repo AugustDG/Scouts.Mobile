@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using Ical.Net.CalendarComponents;
 using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using Scouts.Annotations;
+using Scouts.Dev;
 using Scouts.Events;
 using Scouts.Fetchers;
 using Scouts.View;
@@ -113,7 +116,7 @@ namespace Scouts.ViewModels
 
         public async void DisplayPopup(MonthInlineAppointmentTappedEventArgs args)
         {
-            ScheduleAppointment appointment = (ScheduleAppointment) args.Appointment;
+            var appointment = (ScheduleAppointment) args.Appointment;
 
             if (appointment is null)
                 return;
@@ -139,41 +142,48 @@ namespace Scouts.ViewModels
 
         private async void FetchAndDisplayCalendar()
         {
-            IsRefreshing = true;
-
-            CalendarFetcher fetcher = new CalendarFetcher();
-
-            var cal = await fetcher.GetCalendar();
-
-            ScheduledEvents.Clear();
-
-            lastRefreshed = DateTime.Now;
-
-            for (int i = 0; i < 10; i++)
+            try
             {
-                var app = new ScheduleAppointment
-                {
-                    Subject = cal.Events[i].Summary,
-                    Notes = cal.Events[i].Description,
-                    IsAllDay = cal.Events[i].IsAllDay
-                };
+                IsRefreshing = true;
 
-                if (cal.Events[i].DtStart.AsSystemLocal == cal.Events[i].DtEnd.AsSystemLocal)
-                {
-                    Analytics.TrackEvent("Schedule Error: Same start and end time!",
-                        new Dictionary<string, string>
-                            {{"Event Name", cal.Events[i].Summary}, {"Event Id", cal.Events[i].Uid}});
+                var fetcher = new CalendarFetcher();
 
-                    continue;
+                var cal = await fetcher.GetCalendar();
+
+                ScheduledEvents.Clear();
+
+                lastRefreshed = DateTime.Now;
+
+                foreach (var calEvent in cal.Events)
+                {
+                    var app = new ScheduleAppointment
+                    {
+                        Subject = calEvent.Summary,
+                        Notes = calEvent.Description,
+                        IsAllDay = calEvent.IsAllDay
+                    };
+
+                    if (calEvent.DtStart.AsSystemLocal == calEvent.DtEnd.AsSystemLocal)
+                    {
+                        Crashes.TrackError(new Exception("Schedule Error: Same start and end time!"),
+                            new Dictionary<string, string>
+                                {{"Event Name", calEvent.Summary}, {"Event Id", calEvent.Uid}});
+
+                        continue;
+                    }
+
+                    app.StartTime = calEvent.DtStart.AsSystemLocal;
+                    app.EndTime = calEvent.DtEnd.AsSystemLocal;
+
+                    ScheduledEvents.Add(app);
                 }
 
-                app.StartTime = cal.Events[i].DtStart.AsSystemLocal;
-                app.EndTime = cal.Events[i].DtEnd.AsSystemLocal;
-
-                ScheduledEvents.Add(app);
+                IsRefreshing = false;
             }
-
-            IsRefreshing = false;
+            catch (Exception e)
+            {
+                Crashes.TrackError(e, new Dictionary<string, string> { }, ErrorAttachmentLog.AttachmentWithText(e.StackTrace, "StackTrace"));
+            }
         }
 
         #endregion

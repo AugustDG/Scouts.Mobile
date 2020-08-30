@@ -205,7 +205,7 @@ namespace Scouts.Fetchers
             {
                 //creates a [filter] to find the documents requested
                 var filter = Builders<InfoModel>.Filter.Empty;
-                FindOptions<InfoModel> find = new FindOptions<InfoModel>
+                var find = new FindOptions<InfoModel>
                 {
                     Limit = numbOfItems,
                 };

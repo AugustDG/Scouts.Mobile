@@ -40,9 +40,9 @@ namespace Scouts.Security
         public static string CreateHash(string password)
         {
             // Generate a random salt
-            byte[] salt = new byte[SALT_BYTES];
+            var salt = new byte[SALT_BYTES];
             try {
-                using (RNGCryptoServiceProvider csprng = new RNGCryptoServiceProvider()) {
+                using (var csprng = new RNGCryptoServiceProvider()) {
                         csprng.GetBytes(salt);
                 }
             } catch (CryptographicException ex) {
@@ -57,24 +57,24 @@ namespace Scouts.Security
                 );
             }
 
-            byte[] hash = PBKDF2(password, salt, PBKDF2_ITERATIONS, HASH_BYTES);
+            var hash = PBKDF2(password, salt, PBKDF2_ITERATIONS, HASH_BYTES);
 
             // format: algorithm:iterations:hashSize:salt:hash
-            String parts = "sha1:" +
-                PBKDF2_ITERATIONS +
-                ":" +
-                hash.Length +
-                ":" +
-                Convert.ToBase64String(salt) +
-                ":" +
-                Convert.ToBase64String(hash);
+            var parts = "sha1:" +
+                        PBKDF2_ITERATIONS +
+                        ":" +
+                        hash.Length +
+                        ":" +
+                        Convert.ToBase64String(salt) +
+                        ":" +
+                        Convert.ToBase64String(hash);
             return parts;
         }
 
         public static bool VerifyPassword(string password, string goodHash)
         {
             char[] delimiter = { ':' };
-            string[] split = goodHash.Split(delimiter);
+            var split = goodHash.Split(delimiter);
 
             if (split.Length != HASH_SECTIONS) {
                 throw new InvalidHashException(
@@ -89,7 +89,7 @@ namespace Scouts.Security
                 );
             }
 
-            int iterations = 0;
+            var iterations = 0;
             try {
                 iterations = Int32.Parse(split[ITERATION_INDEX]);
             } catch (ArgumentNullException ex) {
@@ -147,7 +147,7 @@ namespace Scouts.Security
                 );
             }
 
-            int storedHashSize = 0;
+            var storedHashSize = 0;
             try {
                 storedHashSize = Int32.Parse(split[HASH_SIZE_INDEX]);
             } catch (ArgumentNullException ex) {
@@ -173,14 +173,14 @@ namespace Scouts.Security
                 );
             }
 
-            byte[] testHash = PBKDF2(password, salt, iterations, hash.Length);
+            var testHash = PBKDF2(password, salt, iterations, hash.Length);
             return SlowEquals(hash, testHash);
         }
 
         private static bool SlowEquals(byte[] a, byte[] b)
         {
-            uint diff = (uint)a.Length ^ (uint)b.Length;
-            for (int i = 0; i < a.Length && i < b.Length; i++) {
+            var diff = (uint)a.Length ^ (uint)b.Length;
+            for (var i = 0; i < a.Length && i < b.Length; i++) {
                 diff |= (uint)(a[i] ^ b[i]);
             }
             return diff == 0;
@@ -188,7 +188,7 @@ namespace Scouts.Security
 
         private static byte[] PBKDF2(string password, byte[] salt, int iterations, int outputBytes)
         {
-            using (Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, salt)) {
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt)) {
                 pbkdf2.IterationCount = iterations;
                 return pbkdf2.GetBytes(outputBytes);
             }

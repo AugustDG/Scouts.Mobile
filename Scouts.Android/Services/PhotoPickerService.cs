@@ -15,7 +15,7 @@ namespace Scouts.Droid.Services
         public Task<Stream> GetImageStreamAsync()
         {
             // Define the Intent for getting images
-            Intent intent = new Intent();
+            var intent = new Intent();
             intent.SetType("image/*");
             intent.SetAction(Intent.ActionGetContent);
 

@@ -9,7 +9,7 @@ namespace Scouts.View.Popups
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddItemPopup
     {
-        public InfoPageModel InfoPageModel;
+        public InfoPageModel InfoPageModel { get; set; }
         
         private AddItemPopupModel _pageModel;
 

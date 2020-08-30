@@ -39,7 +39,7 @@ namespace Scouts.ViewModels
             
             await Task.Run(() =>
             {
-                List<string> userIds = new List<string> {AppSettings.CurrentUser.UserId, user.UserId};
+                var userIds = new List<string> {AppSettings.CurrentUser.UserId, user.UserId};
             
                 userIds.Sort();
             
@@ -66,7 +66,7 @@ namespace Scouts.ViewModels
             IsBusy = true;
 
             var userLists = await MongoClient.Instance.GetAllUserModelsTask();
-            List<ChatUserModel> chatUserList = new List<ChatUserModel>();
+            var chatUserList = new List<ChatUserModel>();
             
             await Task.Run(() =>
             {

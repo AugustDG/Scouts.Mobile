@@ -120,7 +120,7 @@ namespace Scouts.ViewModels
         {
             _page = pg;
 
-            bool isAllChecked = true;
+            var isAllChecked = true;
 
             foreach (var subscription in NotificationSubscriptions)
             {
@@ -141,7 +141,7 @@ namespace Scouts.ViewModels
 
         private void OnCheckedChanged()
         {
-            bool isAllChecked = true;
+            var isAllChecked = true;
 
             foreach (var subscription in NotificationSubscriptions)
             {
@@ -164,7 +164,7 @@ namespace Scouts.ViewModels
 
         private void AllNotifCheckedChanged(bool checkStatus)
         {
-            for (int i = 0; i < NotificationSubscriptions.Count; i++)
+            for (var i = 0; i < NotificationSubscriptions.Count; i++)
             {
                 NotificationSubscriptions[i] = checkStatus;
             }
@@ -193,11 +193,11 @@ namespace Scouts.ViewModels
 
         private async void ChangeUsername()
         {
-            UserDialogPopup dialogPopup = new UserDialogPopup(false);
+            var dialogPopup = new UserDialogPopup(false);
 
             var popupModel = (UserDialogPopupModel) dialogPopup.BindingContext;
 
-            bool isUsernameValid = false;
+            var isUsernameValid = false;
 
             popupModel.OnTextChangedCommand = new Command<string>(text =>
             {
@@ -239,11 +239,11 @@ namespace Scouts.ViewModels
 
         private async void ChangePassword()
         {
-            UserDialogPopup dialogPopup = new UserDialogPopup(true);
+            var dialogPopup = new UserDialogPopup(true);
 
             var popupModel = (UserDialogPopupModel) dialogPopup.BindingContext;
 
-            bool isPasswordValid = false;
+            var isPasswordValid = false;
 
             popupModel.OnTextChangedCommand = new Command<string>(text =>
             {

@@ -213,9 +213,9 @@ namespace Scouts.ViewModels
                     if (file == null)
                         return;
 
-                    using (MemoryStream ms = new MemoryStream())
+                    using (var ms = new MemoryStream())
                     {
-                        using (Stream str = file.GetStream())
+                        using (var str = file.GetStream())
                         {
                             str.CopyTo(ms);
                             _imgBytes = ms.ToArray();
@@ -276,7 +276,7 @@ namespace Scouts.ViewModels
                 return;
             }
 
-            if ((FileType) InfoAttachType == FileType.Image ||
+            if ((FileType) InfoAttachType == FileType.Image ^
                 (FileType) InfoAttachType == FileType.ImageAndDocument && _imgBytes is null)
             {
                 Helpers.DisplayMessage("Aucun document choisi!");

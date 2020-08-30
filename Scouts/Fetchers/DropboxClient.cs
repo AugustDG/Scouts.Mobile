@@ -37,7 +37,7 @@ namespace Scouts.Fetchers
 
                         path += "/Image1.jpg";
 
-                        await using FileStream fs = File.Create(path);
+                        await using var fs = File.Create(path);
                         await stream.CopyToAsync(fs);
 
                         return path;

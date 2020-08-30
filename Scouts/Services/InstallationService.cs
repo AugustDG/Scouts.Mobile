@@ -45,7 +45,7 @@ namespace Scouts.Services
                 default: throw new NotImplementedException();
             }
 
-            HttpClient client = new HttpClient();
+            var client = new HttpClient();
 
             var updateUri = new Uri(
                 "https://scouts-chat.azurewebsites.net/Installation/CreateOrUpdateInstallation",
@@ -61,13 +61,13 @@ namespace Scouts.Services
 
         public static async void DeleteServerInstallation()
         {
-            DeviceInstallationModel installationModel = new DeviceInstallationModel
+            var installationModel = new DeviceInstallationModel
             {
                 InstallationId = AppSettings.DeviceInstallation?.InstallationId,
                 PushChannel = AppSettings.PnsId,
             };
 
-            HttpClient client = new HttpClient();
+            var client = new HttpClient();
 
             var uri = new Uri(
                 $"https://scouts-chat.azurewebsites.net/Installation/DeleteInstallation?installationId={installationModel.InstallationId}",
