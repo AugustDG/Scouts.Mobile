@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Crashes;
 using MongoDB.Driver;
 using MvvmHelpers;
 using Scouts.Dev;
@@ -96,7 +98,7 @@ namespace Scouts.ViewModels
         private InfoDetailsPopup _detailsPopup;
         private AddItemPopup _addItemPopup;
         private FilterPopup _filterPopup;
-        
+
         private int _iteration;
         private bool _scriptChange;
 
@@ -135,7 +137,7 @@ namespace Scouts.ViewModels
         private async void ShowAddPopup()
         {
             _addItemPopup ??= new AddItemPopup(this);
-            
+
             await NotificationHubConnectionService.ConnectAsync();
 
             await Shell.Current.Navigation.PushModalAsync(_addItemPopup, false);
@@ -177,76 +179,78 @@ namespace Scouts.ViewModels
             {
                 Helpers.DisplayMessage("Article supprimé avec succès!");
             }
-            
+
             RefreshNewsList();
         }
-        
+
         private async void RefreshNewsList()
         {
-            await Task.Run(async () =>
-            {
-                IsBusy = true;
+            IsBusy = true;
 
-                InfoCollection.Clear();
+            InfoCollection.Clear();
 
-                lastRefreshed = DateTime.Now;
+            lastRefreshed = DateTime.Now;
 
-                var foundDocs = await MongoClient.Instance.NewsCollection.Find(CurrentFilterDefinition).Limit(15)
-                    .SortByDescending(x => x.PostedTime).ToListAsync();
+            var foundDocs = await MongoClient.Instance.NewsCollection.Find(CurrentFilterDefinition).Limit(15)
+                .SortByDescending(x => x.PostedTime).ToListAsync();
 
-                var taskList = new List<Task>();
+            var taskList = new List<Task>();
 
-                foundDocs.ForEach((model) => { taskList.Add(GetInfoImages(model)); });
+            foundDocs.ForEach((model) => { taskList.Add(GetInfoImages(model)); });
 
-                await Task.WhenAll(taskList);
+            await Task.WhenAll(taskList);
 
-                InfoCollection.AddRange(foundDocs);
+            InfoCollection.AddRange(foundDocs);
 
-                _iteration = InfoCollection.Count;
+            _iteration = InfoCollection.Count;
 
-                IsBusy = false;
-            });
+            IsBusy = false;
         }
 
         private async void LoadMoreItems()
         {
-            await Task.Run(async () =>
-            {
-                var foundDocs = await MongoClient.Instance.NewsCollection.Find(CurrentFilterDefinition)
-                    .Skip(_iteration).Limit(15)
-                    .SortByDescending(x => x.PostedTime).ToListAsync();
+            var foundDocs = await MongoClient.Instance.NewsCollection.Find(CurrentFilterDefinition)
+                .Skip(_iteration).Limit(15)
+                .SortByDescending(x => x.PostedTime).ToListAsync();
 
-                var taskList = new List<Task>();
+            var taskList = new List<Task>();
 
-                foundDocs.ForEach((model) => { taskList.Add(GetInfoImages(model)); });
+            foundDocs.ForEach((model) => { taskList.Add(GetInfoImages(model)); });
 
-                await Task.WhenAll(taskList);
+            await Task.WhenAll(taskList);
 
-                InfoCollection.AddRange(foundDocs);
+            InfoCollection.AddRange(foundDocs);
 
-                _iteration = InfoCollection.Count;
-            });
+            _iteration = InfoCollection.Count;
         }
 
         private async Task GetInfoImages(InfoModel model)
         {
-            var folderName = model.id.ToString();
-
-            var path = $"{FileSystem.CacheDirectory}/{folderName}";
-
-            if (!Directory.Exists(path))
+            string path = string.Empty;
+            try
             {
-                if (model.InfoAttachType == FileType.Image)
-                {
-                    await DropboxClient.Instance.DownloadImage(folderName);
+                var folderName = model.id.ToString();
 
-                    path = $"{FileSystem.CacheDirectory}/{folderName}/Image1.jpg";
-                    model.Image = ImageSource.FromFile(path);
+                path = $"{FileSystem.CacheDirectory}/{folderName}";
+
+                if (!Directory.Exists(path))
+                {
+                    if (model.InfoAttachType == FileType.Image)
+                    {
+                        await DropboxClient.Instance.DownloadImage(folderName);
+
+                        path = $"{FileSystem.CacheDirectory}/{folderName}/Image1.jpg";
+                        model.Image = ImageSource.FromFile(path);
+                    }
+                }
+                else
+                {
+                    model.Image = ImageSource.FromFile($"{path}/Image1.jpg");
                 }
             }
-            else
+            catch (Exception e)
             {
-                model.Image = ImageSource.FromFile($"{path}/Image1.jpg");
+                Crashes.TrackError(e, new Dictionary<string, string> {{"Model Id", $"{model?.id}" }, { "Image Path", $"{path}" } }, ErrorAttachmentLog.AttachmentWithText(e.StackTrace, "StackTrace"));
             }
         }
 
@@ -276,9 +280,9 @@ namespace Scouts.ViewModels
             if (InfoEventType != -1)
                 filterDefinitions.Add(new FilterDefinitionBuilder<InfoModel>().Eq(x => x.InfoEventType,
                     (EventType) _infoEventType));
-            
+
             filterDefinitions.Add(new FilterDefinitionBuilder<InfoModel>().Eq(x => x.IsUrgent, _isUrgent));
-            
+
 
             CurrentFilterDefinition = new FilterDefinitionBuilder<InfoModel>().And(filterDefinitions);
 
@@ -288,13 +292,13 @@ namespace Scouts.ViewModels
         private void ClearFilter()
         {
             _scriptChange = true;
-            
+
             IsUrgent = false;
             InfoEventType = -1;
             InfoPublicType = -1;
 
             _scriptChange = false;
-            
+
             FilterButtColor = (Color) Application.Current.Resources["SecondaryForegroundColor"];
 
             CurrentFilterDefinition = FilterDefinition<InfoModel>.Empty;

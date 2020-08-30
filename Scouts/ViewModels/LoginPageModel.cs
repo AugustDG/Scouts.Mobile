@@ -265,7 +265,6 @@ namespace Scouts.ViewModels
                         {"App Version", AppInfo.VersionString + "/" + AppInfo.BuildString}
                     });
                 
-                DropboxClient.Instance ??= new DropboxClient();
                 OptionsDropdown.DropdownInstance ??= new OptionsDropdown();
 
                 Device.BeginInvokeOnMainThread(() =>

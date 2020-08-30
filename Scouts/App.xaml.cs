@@ -20,6 +20,7 @@ namespace Scouts
                 "Mjg5NjUzQDMxMzgyZTMyMmUzMEJXVHg2SjdNMUxHelhORnFYZG5CUmN5WHN3em1BMXVEVWxqUEhtNFM1RTQ9");
             
             MongoClient.Instance ??= new MongoClient();
+            DropboxClient.Instance ??= new DropboxClient();
             AppSettings.Init();
             
             NotificationHubConnectionService.Init();
