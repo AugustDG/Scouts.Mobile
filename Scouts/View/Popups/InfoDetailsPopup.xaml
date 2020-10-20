@@ -5,10 +5,8 @@
                  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                  xmlns:image="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
                  xmlns:transforms="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-                 x:Class="Scouts.View.InfoDetailsPopup"
-                 CloseWhenBackgroundIsClicked="False"
-                 Opacity="0"
-                 Scale="1.2">
+                 x:Class="Scouts.View.Popups.InfoDetailsPopup"
+                 CloseWhenBackgroundIsClicked="False">
 
     <Frame Margin="20, 30, 20, 30"
            CornerRadius="10"
@@ -45,8 +43,8 @@
                                        HeightRequest="{Binding ImageHeightRequest}"
                                        DownsampleToViewSize="True"
                                        BitmapOptimizations="True"
-                                       CacheDuration="10"
-                                       CacheType="Memory"
+                                       CacheDuration="30"
+                                       CacheType="All"
                                        LoadingPlaceholder="@drawable/logo_200.png">
                         <image:CachedImage.Transformations>
                             <transforms:RoundedTransformation Radius="10" />
@@ -85,11 +83,11 @@
                     Padding="0, -5, 0, 0"
                     FontSize="30"
                     CornerRadius="5"
+                    
+                    Command="{Binding ClosePopupCommand}"
 
                     BackgroundColor="{Binding InfoButtColor}"
-                    TextColor="{StaticResource SyncPrimaryColor}"
-
-                    Clicked="Button_OnClicked" />
+                    TextColor="{StaticResource SyncPrimaryColor}"/>
         </Grid>
     </Frame>
 </popup:PopupPage>

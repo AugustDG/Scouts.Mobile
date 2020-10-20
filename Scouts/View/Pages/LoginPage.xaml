@@ -2,11 +2,11 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Scouts.ViewModels;assembly=Scouts"
              xmlns:syncInput="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
-             xmlns:syncGradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
              xmlns:syncButtons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:sharpnado="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
-             x:Class="Scouts.View.LoginPage"
+             x:Class="Scouts.View.Pages.LoginPage"
 
              Shell.PresentationMode="ModalAnimated"
              Shell.NavBarIsVisible="False">
@@ -25,10 +25,10 @@
                 </Frame.Background>
             </Frame>
 
-            <sharpnado:Shadows x:Name="SignInFrame" 
-                               x:FieldModifier="public" 
+            <sharpnado:Shadows x:Name="SignInFrame"
+                               x:FieldModifier="public"
                                Opacity="0"
-                               TranslationX="0" 
+                               TranslationX="0"
                                CornerRadius="5"
                                Shades="{sharpnado:SingleShade Offset='5, 5', Color=Black, Opacity=0.6}">
                 <!-- Sign In -->
@@ -77,6 +77,7 @@
                                            x:FieldModifier="public"
                                            Text="{Binding Username,Mode=TwoWay}"
                                            TextColor="White"
+
                                            ReturnCommand="{Binding CheckUserCommand}" />
                                 </syncInput:SfTextInputLayout>
 
@@ -98,30 +99,15 @@
 
                                            ReturnCommand="{Binding CheckUserCommand}" />
                                 </syncInput:SfTextInputLayout>
-
-                                <syncButtons:SfCheckBox IsChecked="{Binding IsSaveUsernameCheck, Mode=TwoWay}"
-                                                        Text="Sauvegarder nom d'utilisateur"
-                                                        IsEnabled="{Binding IsNotBusy}"
-
-                                                        Style="{StaticResource CheckStyle}"
-
-                                                        Margin="{Binding CheckMargin}" />
-
-                                <syncButtons:SfCheckBox IsChecked="{Binding IsLoginAutomaticCheck}"
-                                                        Text="Rentrer automatiquement"
-                                                        IsEnabled="{Binding IsNotBusy}"
-
-                                                        Style="{StaticResource CheckStyle}"
-
-                                                        Margin="{Binding CheckMargin}" />
                             </StackLayout>
                         </ScrollView>
 
                         <syncButtons:SfButton Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                              Command="{Binding CheckUserCommand}"
+                                              x:Name="SubmitButt"
                                               IsEnabled="{Binding IsNotBusy}"
 
                                               CornerRadius="5"
+                                              Command="{Binding CheckUserCommand}"
 
                                               Margin="0, 0, 0, 10">
                             <syncButtons:SfButton.Content>
@@ -295,77 +281,6 @@
                     </syncButtons:SfButton>
                 </Grid>
             </Frame>
-
-            <!--~1~ Sign In @1@
-            <Frame x:Name="SignInFrame"
-                   x:FieldModifier="public"
-                   TranslationX="500"
-                   BackgroundColor="{DynamicResource MainBackgroundColor}"
-                   CornerRadius="5"
-                   Margin="30, 40, 30, 40">
-                <Frame.GestureRecognizers>
-                    <SwipeGestureRecognizer Direction="Right" Command="{Binding GoBackCommand}"
-                                            CommandParameter="{Reference Name=SignInFrame}" />
-                </Frame.GestureRecognizers>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0.8*" />
-                        <RowDefinition Height="0.1*" />
-                    </Grid.RowDefinitions>
-                    <ScrollView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                        <StackLayout>
-                            <StackLayout HeightRequest="150"
-                                         Margin="0, -20, 0, 0">
-                                <Image Source="@drawable/logo_200px"
-                                       Scale="0.4" />
-                            </StackLayout>
-
-                            <Label TextType="Text"
-                                   HorizontalTextAlignment="Center"
-                                   FontSize="35"
-                                   TextColor="White"
-                                   Margin="0, 0, 0, 30">
-                                REBONJOUR!
-                            </Label>
-
-                            <Label TextType="Text"
-                                   HorizontalTextAlignment="Center"
-                                   FontSize="20"
-                                   TextColor="White"
-                                   Margin="0, 0, 0, 10">
-                                Veuillez rentrer votre mot de passe :)
-                            </Label>
-
-                            <BoxView Color="White"
-                                     HeightRequest="2"
-                                     HorizontalOptions="Fill" />
-                        </StackLayout>
-                    </ScrollView>
-
-                    <syncButtons:SfButton Grid.Row="1" Grid.Column="1"
-                                          Command="{Binding SubmitPassCommandSignIn}"
-
-                                          Style="{DynamicResource ButtonStyle}"
-
-                                          Margin="0, 0, 0, 10">
-                        <syncButtons:SfButton.Content>
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                <ActivityIndicator x:Name="BusyIndicatorSignIn"
-                                                   IsRunning="{Binding IsBusy}"
-                                                   IsVisible="{Binding IsBusy}"
-                                                   Style="{DynamicResource BusyIndicatorLabelStyle}" />
-                                <Label Text="ACCÉDER"
-                                       Style="{DynamicResource ButtonLabelStyle}"
-                                       IsEnabled="{Binding IsBusy, Converter={StaticResource NegateBoolean}}" />
-                            </StackLayout>
-                        </syncButtons:SfButton.Content>
-                    </syncButtons:SfButton>
-                </Grid>
-            </Frame>-->
         </Grid>
     </ContentPage.Content>
 </ContentPage>

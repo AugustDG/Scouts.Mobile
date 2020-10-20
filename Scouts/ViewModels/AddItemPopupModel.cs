@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using MvvmHelpers;
-using Plugin.Media;
-using Plugin.Media.Abstractions;
+using MvvmHelpers.Commands;
+using Plugin.FilePicker;
+using Rg.Plugins.Popup.Services;
 using Scouts.Dev;
+using Scouts.Events;
 using Scouts.Fetchers;
+using Scouts.Interfaces;
 using Scouts.Models;
 using Scouts.Models.Enums;
 using Scouts.Services;
@@ -17,23 +20,33 @@ using Scouts.Settings;
 using Scouts.View.Popups;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using XF.Material.Forms.UI.Dialogs;
+using Command = Xamarin.Forms.Command;
 
 namespace Scouts.ViewModels
 {
     public class AddItemPopupModel : BaseViewModel
     {
-        public string PostTitle { get; set; }
+        public string PostTitle
+        {
+            get => _postTitle;
+            set => SetProperty(ref _postTitle, value);
+        }
 
-        public string PostContent { get; set; }
+        private string _postTitle = string.Empty;
+
+        public string PostContent
+        {
+            get => _postContent;
+            set => SetProperty(ref _postContent, value);
+        }
+
+        private string _postContent = string.Empty;
 
         public int InfoAttachType
         {
             get => _infoAttachType;
-            set
-            {
-                SetProperty(ref _infoAttachType, value);
-                FileTypeChanged();
-            }
+            set { SetProperty(ref _infoAttachType, value); }
         }
 
         public int _infoAttachType;
@@ -44,7 +57,7 @@ namespace Scouts.ViewModels
             set => SetProperty(ref _infoEventType, value);
         }
 
-        public int _infoEventType = -1;
+        public int _infoEventType = 3;
 
         public int InfoPublicType
         {
@@ -68,219 +81,202 @@ namespace Scouts.ViewModels
             set => SetProperty(ref _buttonImage, value);
         }
 
-        private ImageSource _buttonImage = "@drawable/add.png";
+        private ImageSource _buttonImage = "@drawable/add_100.png";
 
-        public ImageSource ButtonImageDoc
+        public Aspect ImageAspect
         {
-            get => _buttonImageDoc;
-            set => SetProperty(ref _buttonImageDoc, value);
+            get => _imageAspect;
+            set => SetProperty(ref _imageAspect, value);
         }
 
-        private ImageSource _buttonImageDoc;
+        private Aspect _imageAspect = Aspect.AspectFit;
 
-        public Thickness ButtonMargin
+        public int CarouselPosition
         {
-            get => _buttonMargin;
-            set => SetProperty(ref _buttonMargin, value);
+            get => _carouselPosition;
+            set => SetProperty(ref _carouselPosition, value);
         }
 
-        private Thickness _buttonMargin = new Thickness(0, 0, 15, 0);
+        private int _carouselPosition = 1;
 
-        public bool HasFile
+        #region Error Section
+
+        public bool TitleHasError
         {
-            get => _hasFile;
-            set => SetProperty(ref _hasFile, value);
+            get => _titleHasError;
+            set => SetProperty(ref _titleHasError, value);
         }
 
-        private bool _hasFile;
+        private bool _titleHasError;
 
-        public bool HasImgDoc
+        public string TitleErrorMsg
         {
-            get => _hasImgDoc;
-            set => SetProperty(ref _hasImgDoc, value);
+            get => _titleErrorMsg;
+            set => SetProperty(ref _titleErrorMsg, value);
         }
 
-        private bool _hasImgDoc;
+        private string _titleErrorMsg;
 
-        public Command PickCommand => new Command(Pick);
+        public bool ContentHasError
+        {
+            get => _contentHasError;
+            set => SetProperty(ref _contentHasError, value);
+        }
 
-        public Command PickDocumentCommand => new Command(PickDocument);
+        private bool _contentHasError;
 
+        public string ContentErrorMsg
+        {
+            get => _contentErrorMsg;
+            set => SetProperty(ref _contentErrorMsg, value);
+        }
+
+        private string _contentErrorMsg;
+
+        #endregion Error Section
+
+        public Command PickCommand => new Command(PickFile);
         public Command SubmitNewsCommand => new Command(SubmitNews);
-
-        public Command CancelCommand => new Command(_page.ClosePopup);
-
+        public AsyncCommand CancelCommand => new AsyncCommand(ClosePopupAsync);
         public Command FinishedTitleCommand => new Command(_page.FocusContentLayout);
 
         private AddItemPopup _page;
-        private byte[] _imgBytes;
+        private byte[] _docBytes;
+        private bool _hasAsked;
 
         public AddItemPopupModel(AddItemPopup pg)
         {
             _page = pg;
-
-            ButtonImage = "@drawable/image.png";
-            ButtonImageDoc = "@drawable/document.png";
         }
 
-        private void FileTypeChanged()
+        private Task ClosePopupAsync()
         {
-            var type = (FileType) InfoAttachType;
-
-            switch (type)
-            {
-                case FileType.None:
-                    HasFile = false;
-                    HasImgDoc = false;
-                    break;
-                case FileType.Image:
-                    ButtonImage = "@drawable/image.png";
-
-                    HasFile = true;
-                    HasImgDoc = false;
-
-                    ButtonMargin = new Thickness(0, 0, 25, 0);
-
-                    break;
-                case FileType.Document:
-                    ButtonImage = "@drawable/document.png";
-
-                    HasFile = true;
-                    HasImgDoc = false;
-
-                    ButtonMargin = new Thickness(0, 0, 25, 0);
-
-                    break;
-                case FileType.ImageAndDocument:
-                    ButtonImage = "@drawable/image.png";
-                    ButtonImageDoc = "@drawable/document.png";
-
-                    HasFile = true;
-                    HasImgDoc = true;
-
-                    ButtonMargin = new Thickness(0, 0, 75, 0);
-
-                    break;
-            }
+            return PopupNavigation.Instance.PopAsync(false);
         }
 
-        private void Pick()
-        {
-            var type = (FileType) InfoAttachType;
-
-            switch (type)
-            {
-                case FileType.Image:
-                    PickImage();
-                    break;
-                case FileType.Document:
-                    PickDocument();
-                    break;
-                case FileType.ImageAndDocument:
-                    PickImage();
-                    break;
-            }
-        }
-
-        private void PickDocument()
-        {
-            var type = (FileType) InfoAttachType;
-
-            switch (type)
-            {
-                case FileType.Document:
-                    ButtonImage = "@drawable/checkmark.png";
-                    break;
-                case FileType.ImageAndDocument:
-                    ButtonImageDoc = "@drawable/checkmark.png";
-                    break;
-            }
-        }
-
-        private async void PickImage()
+        private async void PickFile()
         {
             try
             {
-                var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
+                if (InfoAttachType == 1)
                 {
-                    CompressionQuality = 100,
-                    PhotoSize = PhotoSize.MaxWidthHeight,
-                    MaxWidthHeight = 900
-                });
+                    InfoAttachType = 0;
+                    _docBytes = null;
+                    ButtonImage = "@drawable/add_100.png";
+                    ImageAspect = Aspect.AspectFit;
+                }
 
-                await Task.Run(() =>
+                var fileData = await CrossFilePicker.Current.PickFile(new[] {"image/*"});
+
+                if (fileData == null)
                 {
-                    if (file == null)
-                        return;
+                    InfoAttachType = 0;
+                    return;
+                }
 
-                    using (var ms = new MemoryStream())
-                    {
-                        using (var str = file.GetStream())
-                        {
-                            str.CopyTo(ms);
-                            _imgBytes = ms.ToArray();
-                        }
-                    }
+                InfoAttachType = 1;
+                ImageAspect = Aspect.AspectFill;
+                _docBytes = await DependencyService.Get<IImageResizerService>()
+                    .ResizeImage(fileData.DataArray, 900, 300);
 
-                    ButtonImage = ImageSource.FromFile(file.Path);
-                });
+                if (_docBytes.Length == 1)
+                {
+                    InfoAttachType = 0;
+                    return;
+                }
+
+                ButtonImage = ImageSource.FromStream(() => new MemoryStream(_docBytes));
             }
             catch (Exception e)
             {
-                await Shell.Current.DisplayAlert("Erreur", e.Message, "Ok");
+                Crashes.TrackError(e);
             }
         }
 
         private async void SubmitNews()
         {
             IsBusy = true;
-            
-            Debug.WriteLine("Sending...");
 
-            var titleRegex = new Regex("^(?=.{2,50}$)");
-            var contentRegex = new Regex("^(?=.{2,500}$)");
+            TitleHasError = false;
+            ContentHasError = false;
 
-            if (PostTitle is null || PostTitle.Length < 2)
+            var titleRegex = new Regex("^(?=.{2,500}$)");
+            var contentRegex = new Regex("^(?=.{2,5000}$)");
+
+            if (string.IsNullOrWhiteSpace(PostTitle))
             {
-                Helpers.DisplayMessage("Titre Vide");
+                TitleErrorMsg = "Titre Vide";
+                TitleHasError = true;
+                IsBusy = false;
                 return;
             }
 
-            if (PostContent is null || PostContent.Length < 2)
+            if (string.IsNullOrWhiteSpace(PostContent))
             {
-                Helpers.DisplayMessage("Contenu Vide");
+                ContentErrorMsg = "Contenu Vide";
+                ContentHasError = true;
+                IsBusy = false;
                 return;
             }
 
             if (!titleRegex.IsMatch(PostTitle))
             {
                 Helpers.DisplayMessage("Titre Invalide");
+                TitleErrorMsg = "Titre Invalide!";
+                TitleHasError = true;
+                IsBusy = false;
                 return;
             }
 
             if (!contentRegex.IsMatch(PostContent))
             {
-                Helpers.DisplayMessage("Contenu Invalide");
+                ContentErrorMsg = "Contenu Invalide";
+                ContentHasError = true;
+                IsBusy = false;
                 return;
             }
 
-            if (InfoEventType == -1)
+            if (InfoEventType == 3 && InfoPublicType == 7 && !_hasAsked)
             {
-                Helpers.DisplayMessage("SVP choisir un type d'évènement");
-                return;
+                if (!await MaterialDialog.Instance.ConfirmAsync("Confirmation",
+                    "Vous n'avez pas changé le type d'article, ni le public concerné: êtes-vous sûrs de procéder?",
+                    "Oui!", "Peut-être pas...")?? false)
+                {
+                    CarouselPosition = 0;
+                    IsBusy = false;
+                    _hasAsked = true;
+                    return;
+                }
+            }
+            else if (InfoEventType == 3 && !_hasAsked)
+            {
+                if (!await MaterialDialog.Instance.ConfirmAsync("Confirmation",
+                    "Vous n'avez pas changé le type d'article: êtes-vous sûrs de procéder?",
+                    "Oui!", "Peut-être pas...") ?? false)
+                {
+                    CarouselPosition = 0;
+                    IsBusy = false;
+                    _hasAsked = true;
+                    return;
+                }
+            }
+            else if (InfoPublicType == 7 && !_hasAsked)
+            {
+                if (!await MaterialDialog.Instance.ConfirmAsync("Confirmation",
+                    "Vous n'avez pas changé le public concerné: êtes-vous sûrs de procéder?",
+                    "Oui!", "Peut-être pas...") ?? false)
+                {
+                    CarouselPosition = 0;
+                    IsBusy = false;
+                    _hasAsked = true;
+                    return;
+                }
             }
 
-            if (InfoPublicType == -1)
+            if (InfoAttachType != 1 || _docBytes?.Length == 1)
             {
-                Helpers.DisplayMessage("SVP choisir un public concerné");
-                return;
-            }
-
-            if ((FileType) InfoAttachType == FileType.Image ^
-                (FileType) InfoAttachType == FileType.ImageAndDocument && _imgBytes is null)
-            {
-                Helpers.DisplayMessage("Aucun document choisi!");
-                return;
+                InfoAttachType = 0;
+                _docBytes = null;
             }
 
             var model = new InfoModel
@@ -293,64 +289,62 @@ namespace Scouts.ViewModels
                 InfoEventType = (EventType) InfoEventType,
             };
 
-            var folder = model.id.ToString();
-
-            if (_imgBytes != null) await DropboxClient.Instance.UploadImage(_imgBytes, folder);
-
-            Analytics.TrackEvent("AddedInfoItem",
-                new Dictionary<string, string>
-                {
-                    {"User", AppSettings.CurrentUser.Username + "/" + AppSettings.CurrentUser.UserId},
-                    {"UserType", AppSettings.CurrentUser.UserType.ToString()},
-                    {"Title", PostTitle},
-                    {"Time", DateTime.Now.ToShortTimeString()},
-                    {"App Version", AppInfo.VersionString + "/" + AppInfo.BuildString}
-                });
-
             try
             {
+                var folder = model.id.ToString();
+
+                await DropboxClient.Instance.UploadImage(_docBytes, folder);
+
+                await NotificationHubConnectionService.ConnectAsync();
+
                 await NotificationHubConnectionService.NotifyAsync(
                     $"INF-NOPIC^^^{AppSettings.CurrentUser.Username} vient de poster: {PostTitle}!^^^{PostContent}",
                     $"NotificationType:{((TargetPublicType) InfoPublicType).ToString()}");
 
                 MongoClient.Instance.SetOneNewsModel(model);
 
-                _imgBytes = null;
+                Analytics.TrackEvent("AddedInfoItem",
+                    new Dictionary<string, string>
+                    {
+                        {"User", AppSettings.CurrentUser.Username + "/" + AppSettings.CurrentUser.UserId},
+                        {"UserType", AppSettings.CurrentUser.UserType.ToString()},
+                        {"Title", PostTitle},
+                        {"Time", DateTime.Now.ToShortTimeString()},
+                        {"App Version", AppInfo.VersionString + "/" + AppInfo.BuildString}
+                    });
+
                 PostTitle = string.Empty;
                 PostContent = string.Empty;
 
                 InfoAttachType = 0;
-                InfoEventType = -1;
+                InfoEventType = 3;
                 InfoPublicType = 7;
 
-                _page.InfoPageModel.RefreshCommand.Execute(null);
+                _docBytes = null;
+                ButtonImage = "@drawable/add_100.png";
+                ImageAspect = Aspect.AspectFit;
+                
+                AppEvents.RefreshInfoFeed.Invoke(this, EventArgs.Empty);
 
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    var isQuit = await Shell.Current.DisplayAlert("SUCCÈS", "Info envoyée avec succès :D", "OK!",
+                    var isQuit = await MaterialDialog.Instance.ConfirmAsync("SUCCÈS", "Info envoyée avec succès :D", "OK!",
                         "Une autre!");
 
-                    FileTypeChanged();
-
-                    if (isQuit)
+                    if (isQuit ?? false)
                     {
-                        _page.ClosePopup();
+                        await ClosePopupAsync();
                     }
                 });
             }
             catch (Exception e)
             {
-                Helpers.DisplayMessage(e.Message);
+                await Helpers.DisplayMessageAsync(e.Message);
             }
             finally
             {
                 IsBusy = false;
             }
-        }
-
-        public void ExpanderTapped(Expander exp, Image img)
-        {
-            img.RotateTo(exp.State == ExpanderState.Expanding ? 180 : 0, easing: Easing.SinInOut);
         }
     }
 }

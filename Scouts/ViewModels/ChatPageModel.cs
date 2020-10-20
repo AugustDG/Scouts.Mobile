@@ -9,6 +9,7 @@ using Scouts.Services;
 using Scouts.Settings;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using XF.Material.Forms.UI.Dialogs;
 
 namespace Scouts.ViewModels
 {
@@ -118,7 +119,7 @@ namespace Scouts.ViewModels
         {
             if (!IsConnected)
             {
-                await Shell.Current.DisplayAlert("Déconnecté!", "Reconnectez au serveur, puis réessayez svp!", "OK");
+                await MaterialDialog.Instance.ConfirmAsync("Déconnecté!", "Reconnectez au serveur, puis réessayez svp!", "OK");
                 return;
             }
 

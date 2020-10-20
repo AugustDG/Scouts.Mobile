@@ -114,42 +114,6 @@
                                 </StackLayout>
                             </Expander.Header>
                             <StackLayout Margin="0, 0, 0, 10">
-                                <Frame Margin="15, 7, 15, 2"
-                                       CornerRadius="5"
-                                       Padding="15, 5, 10, 5"
-
-                                       BackgroundColor="{DynamicResource SecondaryForegroundColor}">
-                                    <StackLayout>
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label Text="Sauvegarder nom d'utilisateur"
-                                                   HorizontalOptions="StartAndExpand"
-                                                   VerticalOptions="CenterAndExpand"
-
-                                                   HorizontalTextAlignment="Start"
-                                                   VerticalTextAlignment="Center"
-
-                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
-                                            <CheckBox IsChecked="{Binding IsSaveUsernameCheck, Mode=TwoWay}"
-                                                      HorizontalOptions="EndAndExpand"
-                                                      Color="{DynamicResource SyncPrimaryForegroundColor}" />
-                                        </StackLayout>
-
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label Text="Rentrer automatiquement"
-                                                   HorizontalOptions="StartAndExpand"
-                                                   VerticalOptions="CenterAndExpand"
-
-                                                   HorizontalTextAlignment="Start"
-                                                   VerticalTextAlignment="Center"
-
-                                                   TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
-                                            <CheckBox IsChecked="{Binding IsLoginAutomaticCheck, Mode=TwoWay}"
-                                                      HorizontalOptions="EndAndExpand"
-                                                      Color="{DynamicResource SyncPrimaryForegroundColor}" />
-                                        </StackLayout>
-                                    </StackLayout>
-                                </Frame>
-
                                 <Button Text="Changer nom d'utilisateur"
                                         FontSize="20"
 

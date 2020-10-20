@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Microsoft.AppCenter.Analytics;
 using MvvmHelpers;
-using MvvmHelpers.Commands;
 using Scouts.Dev;
+using Scouts.Events;
 using Scouts.Fetchers;
 using Scouts.Models;
 using Scouts.Security;
 using Scouts.Services;
 using Scouts.Settings;
-using Scouts.View;
+using Scouts.View.Pages;
+using Scouts.View.Popups;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Command = Xamarin.Forms.Command;
+using XF.Material.Forms.UI.Dialogs;
+using Command = MvvmHelpers.Commands.Command;
 
 namespace Scouts.ViewModels
 {
     public class LoginPageModel : BaseViewModel
     {
+        public INavigation Navigation;
+        
         public string Username
         {
             get => _username;
@@ -36,31 +39,6 @@ namespace Scouts.ViewModels
 
         private string _password;
 
-        public bool IsSaveUsernameCheck
-        {
-            get => AppSettings.IsSaveUsername;
-            set
-            {
-                AppSettings.IsSaveUsername = value;
-                SetProperty(ref _isSaveUsername, value);
-            }
-        }
-
-        private bool _isSaveUsername;
-
-        public bool IsLoginAutomaticCheck
-        {
-            get => _isLoginAutomatic;
-            set
-            {
-                AppSettings.IsLoginAutomatic = value;
-                IsSaveUsernameCheck = value;
-                SetProperty(ref _isLoginAutomatic, value);
-            }
-        }
-
-        private bool _isLoginAutomatic;
-
         public Thickness CheckMargin
         {
             get => _checkMargin;
@@ -69,9 +47,15 @@ namespace Scouts.ViewModels
 
         private Thickness _checkMargin;
 
-        public string AccessCode { get; set; }
+        public string AccessCode
+        {
+            get => _accessCode;
+            set => SetProperty(ref _accessCode, value);
+        }
 
-        public AsyncCommand CheckUserCommand => new AsyncCommand(CheckUser);
+        private string _accessCode;
+
+        public Command CheckUserCommand => new Command(CheckUser);
         public Command SubmitPassCommandSignIn => new Command(SubmitPassSignIn);
         public Command SubmitPassCommandSignUp => new Command(SubmitPassSignUp);
         public Command GoBackCommand => new Command(layout => AnimateLayoutInOut((Layout) layout, _page.SignInFrame));
@@ -81,42 +65,12 @@ namespace Scouts.ViewModels
         public LoginPageModel(LoginPage pg)
         {
             _page = pg;
+            
+            AppSettings.Init();
 
-            //AskMissingPermissions();
-            ShowPrivacyAlert();
-            AppSettings.QueueLoadSavedObjects();
-
-            if (IsSaveUsernameCheck) Username = AppSettings.CurrentUser?.Username;
-        }
-
-        private async void AskMissingPermissions()
-        {
-            await MainThread.InvokeOnMainThreadAsync(async () => await Permissions.RequestAsync<Permissions.StorageWrite>());
-        }
-
-        private async void ShowPrivacyAlert()
-        {
-            var currentPrivacyAlert = await Shell.Current.DisplayAlert("Confidentialité 🔐",
-                "En continuant, vous acceptez que des données d'utilisation soient collectés afin d'améliorer l'application!",
-                "Yep!", "Nope!").ContinueWith(x =>
-            {
-                _page.AnimateEntry();
-                return x;
-            });
-
-            if (!currentPrivacyAlert.Result)
-            {
-                Analytics.TrackEvent("UserRejectedPrivacyAlert",
-                    new Dictionary<string, string>
-                    {
-                        {"Device Model", DeviceInfo.Model},
-                        {"Device Name", DeviceInfo.Name},
-                        {"Time", DateTime.Now.ToShortTimeString()},
-                        {"App Version", AppInfo.VersionString + "/" + AppInfo.BuildString}
-                    });
-
-                System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
-            }
+            Username = AppSettings.CurrentUser?.Username;
+            
+            _page.AnimateEntry();
         }
 
         private void AnimateLayoutOutIn(Layout layOut, Layout layIn)
@@ -155,7 +109,7 @@ namespace Scouts.ViewModels
             }
         }
 
-        private async Task CheckUser()
+        private async void CheckUser()
         {
             IsBusy = true;
 
@@ -193,10 +147,10 @@ namespace Scouts.ViewModels
                 IsBusy = false;
 
                 //TODO:fix this literature
-                var willSignUp = await Shell.Current.DisplayAlert("Nom d'utilisateur inconnu 😮",
-                    "Voulez-vous créer un compte?", "ye", "nah");
+                var willSignUp = await MaterialDialog.Instance.ConfirmAsync("Nom d'utilisateur inconnu 😮",
+                    "Voulez-vous créer un compte?", "ye", "nah", configuration: ColorSettings.DefaultMaterialAlertDialogConfiguration);
 
-                if (willSignUp) AnimateLayoutOutIn(_page.SignInFrame, _page.SignUpFrame);
+                if (willSignUp ?? false) AnimateLayoutOutIn(_page.SignInFrame, _page.SignUpFrame);
             }
             else
             {
@@ -240,12 +194,7 @@ namespace Scouts.ViewModels
 
             if (PasswordStorage.VerifyPassword(Password, AppSettings.CurrentUser.Password))
             {
-                AppSettings.IsLoginAutomatic = IsLoginAutomaticCheck;
-
                 AppSettings.CurrentUser.Username = Username;
-
-                AppSettings.CurrentUser.Password =
-                    IsLoginAutomaticCheck ? PasswordStorage.CreateHash(Password) : null;
 
                 InstallationService.CreateOrUpdateServerInstallation(new List<string>()
                 {
@@ -264,13 +213,12 @@ namespace Scouts.ViewModels
                         {"UserType", AppSettings.CurrentUser.UserType.ToString()},
                         {"App Version", AppInfo.VersionString + "/" + AppInfo.BuildString}
                     });
-                
-                OptionsDropdown.DropdownInstance ??= new OptionsDropdown();
 
-                Device.BeginInvokeOnMainThread(() =>
+                Device.BeginInvokeOnMainThread(async () =>
                 {
                     Application.Current.Resources["UserColor"] = AppSettings.CurrentUser.Color;
-                    _page.CloseLogin();
+                    AppEvents.SwitchHomePage (this, 0);
+                    await App.Navigation.PopModalAsync(true);
                 });
             }
             else
@@ -289,10 +237,13 @@ namespace Scouts.ViewModels
         private async void SubmitPassSignUp()
         {
             IsBusy = true;
+
             _page.SignUpPasswordLayout.HasError = false;
             _page.SignUpPasswordLayout.ErrorText = "";
+
             _page.SignUpAccessLayout.HasError = false;
             _page.SignUpAccessLayout.ErrorText = "";
+
             var access = await MongoClient.Instance.GetOneAccessCodeModelTask(AccessCode);
 
             var rx = new Regex("^(?=.{2,50}$)");
@@ -378,9 +329,10 @@ namespace Scouts.ViewModels
 
                 await MongoClient.Instance.SetOneUserModelTask(AppSettings.CurrentUser);
 
-                Device.BeginInvokeOnMainThread(() =>
+                Device.BeginInvokeOnMainThread(async () =>
                 {
-                    _page.CloseLogin();
+                    AppEvents.SwitchHomePage (this, 0);
+                    await App.Navigation.PopModalAsync(true);
                 });
             }
         }

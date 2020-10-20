@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AppCenter.Analytics;
 using MvvmHelpers;
+using MvvmHelpers.Commands;
+using Rg.Plugins.Popup.Services;
 using Scouts.Events;
 using Scouts.Interfaces;
-using Scouts.Services;
 using Scouts.Settings;
-using Scouts.View;
 using Scouts.View.Pages;
+using Scouts.View.Popups;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Command = Xamarin.Forms.Command;
 
 namespace Scouts.ViewModels
 {
@@ -49,9 +53,10 @@ namespace Scouts.ViewModels
 
         public Command ClosePopupCommand => new Command(_page.ClosePopup);
         public Command ShowSettingsPageCommand => new Command(ShowSettingsPage);
-        public Command DisconnectCommand => new Command(Disconnect);
+        public AsyncCommand DisconnectCommand => new AsyncCommand(Disconnect);
 
-        private OptionsDropdown _page;
+        private readonly OptionsDropdown _page;
+        private SettingsPage _settingsPage;
 
         public OptionsDropdownModel(OptionsDropdown optionsDropOut)
         {
@@ -62,7 +67,7 @@ namespace Scouts.ViewModels
         {
             CurrentUsername = AppSettings.CurrentUser.Username.ToUpper();
             CurrentUserType = AppSettings.CurrentUser.UserType.ToString().ToUpper();
-            UserColor = AppSettings.CurrentUser?.Color ?? Color.Accent;
+            UserColor = (Color) AppSettings.CurrentUser?.Color;
 
             OnPropertyChanged(nameof(CurrentUsername));
             OnPropertyChanged(nameof(CurrentUserType));
@@ -70,28 +75,19 @@ namespace Scouts.ViewModels
 
         private async void ShowSettingsPage()
         {
-            var settingsPage = new SettingsPage();
+            _settingsPage = new SettingsPage();
 
-            await Shell.Current.Navigation.PushModalAsync(settingsPage);
+            if (!App.Navigation.ModalStack.Contains(_settingsPage))
+            {
+                await App.Navigation.PushModalAsync(_settingsPage, true);
+                await PopupNavigation.Instance.PopAllAsync();
+            }
         }
 
-        private async void Disconnect()
+        private async Task Disconnect()
         {
-            if (!AppSettings.IsSaveUsername) AppSettings.CurrentUser.Username = null!;
-
-            DependencyService.Get<IDroidMessagingService>().WipeToken();
-            //InstallationService.DeleteServerInstallation(); 
-
-            AppSettings.IsLoginAutomatic = false;
-            AppSettings.CurrentUser.Password = null!;
-            AppSettings.CurrentUser.UserId = null!;
-            AppSettings.DeviceInstallation.Tags = null!;
-            AppSettings.DeviceInstallation.Platform = null!;
-            AppSettings.DeviceInstallation.PushChannel = null!;
+            DependencyService.Get<IMessagingService>().WipeToken();
             
-            AppSettings.QueueClearSavedObjects(new []{nameof(AppSettings.CurrentUser), nameof(AppSettings.SavedNotificationSubscriptions)});
-            AppSettings.QueueSaveChangedObjects(new [] {nameof(AppSettings.DeviceInstallation)});
-
             Analytics.TrackEvent("UserDisconnected",
                 new Dictionary<string, string>
                 {
@@ -100,9 +96,21 @@ namespace Scouts.ViewModels
                     {"App Version", AppInfo.VersionString + "/" + AppInfo.BuildString}
                 });
 
-            await Shell.Current.Navigation.PopToRootAsync(false);
-            await Shell.Current.Navigation.PushModalAsync(new LoginPage());
+            //Clears personal user information
+            AppSettings.CurrentUser = null;
 
+            //Everything is cleared, except the installation id
+            AppSettings.DeviceInstallation.Tags = null;
+            AppSettings.DeviceInstallation.Platform = null;
+            AppSettings.DeviceInstallation.PushChannel = null;
+            
+            AppSettings.QueueClearSavedObjects(new []{nameof(AppSettings.CurrentUser), nameof(AppSettings.SavedNotificationSubscriptions)});
+            AppSettings.QueueSaveChangedObjects(new [] {nameof(AppSettings.DeviceInstallation)});
+
+            App.Navigation.PopToRootAsync(false);
+            PopupNavigation.Instance.PopAllAsync(false);
+            await App.Navigation.PushModalAsync(new LoginPage(), true);
+            
             AppEvents.WipeAllUserData.Invoke(this, EventArgs.Empty);
         }
     }

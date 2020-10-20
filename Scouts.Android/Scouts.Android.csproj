@@ -37,7 +37,7 @@
     <AndroidLinkMode>None</AndroidLinkMode>
     <AotAssemblies>false</AotAssemblies>
     <EnableLLVM>false</EnableLLVM>
-    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
     <MandroidI18n />
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
@@ -63,23 +63,26 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <AotAssemblies>false</AotAssemblies>
+    <AotAssemblies>true</AotAssemblies>
     <EnableLLVM>false</EnableLLVM>
-    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidPackageFormat>aab</AndroidPackageFormat>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <MandroidI18n />
     <AndroidDexTool>d8</AndroidDexTool>
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
     <DefineConstants>
     </DefineConstants>
-    <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
+    <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <AndroidTlsProvider>btls</AndroidTlsProvider>
+    <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
+    <AndroidEnableAssemblyCompression>true</AndroidEnableAssemblyCompression>
+    <AndroidLinkTool>None</AndroidLinkTool>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -95,35 +98,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Acr.UserDialogs" Version="7.1.0.446" />
+    <PackageReference Include="Acr.UserDialogs" Version="7.1.0.462" />
     <PackageReference Include="Amporis.Xamarin.Forms.ColorPicker" Version="1.0.23" />
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.4.0" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.7" />
+    <PackageReference Include="CarouselView.FormsPlugin" Version="5.2.0" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.4.3" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.4.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.9" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="PhotoBrowser.Forms" Version="0.1.4" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.4" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.6" />
+    <PackageReference Include="SegmentedControl.FormsPlugin" Version="2.0.1" />
     <PackageReference Include="Sharpnado.Presentation.Forms" Version="1.7.1" />
-    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.2.0.55" />
-    <PackageReference Include="Syncfusion.Xamarin.Core" Version="18.2.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.3.0.40" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="18.3.0.40" />
+    <PackageReference Include="Syncfusion.Xamarin.SfRichTextEditor" Version="18.3.0.40" />
     <PackageReference Include="Syncfusion.Xamarin.SfSchedule">
-      <Version>18.2.0.55</Version>
+      <Version>18.3.0.40</Version>
     </PackageReference>
-    <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
     <PackageReference Include="Xamarin.Android.Support.Compat">
       <Version>28.0.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AppCompat.Resources" Version="1.1.0.1" />
-    <PackageReference Include="Xamarin.AndroidX.Leanback" Version="1.0.0.2" />
+    <PackageReference Include="Xamarin.AndroidX.Leanback" Version="1.0.0.5" />
+    <PackageReference Include="Xamarin.AndroidX.Media" Version="1.1.0.5" />
     <PackageReference Include="Xamarin.AndroidX.MediaRouter">
-      <Version>1.1.0.2</Version>
+      <Version>1.1.0.5</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.7.1" />
     <PackageReference Include="Xamarin.Azure.NotificationHubs.Android" Version="1.1.1" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Firebase.Messaging" Version="71.1740.4" />
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" />
+    <PackageReference Include="Xamarin.Firebase.Messaging" Version="120.1.0" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1560" />
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.3" />
@@ -132,18 +139,22 @@
     <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
-    <PackageReference Include="Xamarin.GooglePlayServices.Base" Version="71.1610.4" />
+    <PackageReference Include="Xamarin.Google.Dagger" Version="2.25.2.1" />
+    <PackageReference Include="Xamarin.GooglePlayServices.Base" Version="117.1.0" />
+    <PackageReference Include="Xamarin.Plugin.Calendar" Version="1.2.1506" />
+    <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.41" />
+    <PackageReference Include="XF.Material" Version="1.7.5" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dev\Constants.cs" />
-    <Compile Include="Renderers\CustomShellRenderer.cs" />
-    <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\DroidMessagingService.cs" />
-    <Compile Include="Services\PhotoPickerService.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Effects\AutoFillEffect.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ImageResizerDroid.cs" />
+    <Compile Include="Services\PlatformAdjust.cs" />
+    <Compile Include="SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -156,6 +167,8 @@
       <Generator>
       </Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\add_100.png" />
+    <AndroidResource Include="Resources\drawable\back.png" />
     <AndroidResource Include="Resources\drawable\calendar.png" />
     <AndroidResource Include="Resources\drawable\chat.png" />
     <AndroidResource Include="Resources\drawable\checkmark.png" />
@@ -175,6 +188,7 @@
       <Generator>
       </Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\send.png" />
     <AndroidResource Include="Resources\drawable\user_128.png">
       <SubType>Designer</SubType>
       <Generator>
@@ -203,6 +217,8 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\" />
+    <Folder Include="Renderers\" />
     <Folder Include="Resources\drawable-hdpi\" />
     <Folder Include="Resources\drawable-xhdpi\" />
     <Folder Include="Resources\drawable-xxhdpi\" />
@@ -222,6 +238,9 @@
   </ItemGroup>
   <ItemGroup>
     <GoogleServicesJson Include="google-services.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProguardConfiguration Include="proguard.cfg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

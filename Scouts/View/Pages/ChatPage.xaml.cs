@@ -17,17 +17,6 @@ namespace Scouts.View.Pages
 
             BindingContext = _pageModel;
         }
-        
-        protected override bool OnBackButtonPressed()
-        {
-            if (Shell.Current.Navigation.ModalStack.Count > 0)
-            {
-                Shell.Current.Navigation.PopModalAsync();
-                return true;   
-            }
-            else
-                return false;
-        }
 
         protected override void OnAppearing()
         {

@@ -9,18 +9,13 @@ namespace Scouts.View.Pages
     public partial class SettingsPage
     {
         private SettingsPageModel _pageModel;
-        
-        public static SettingsPage Instance { get; set; }
-        
+
         public SettingsPage()
         {
             InitializeComponent();
-            
-            _pageModel = new SettingsPageModel(this);
 
+            _pageModel = new SettingsPageModel(this);
             BindingContext = _pageModel;
-            
-            Instance = this;
         }
 
         private void AccExpander_OnTapped(object sender, EventArgs e)

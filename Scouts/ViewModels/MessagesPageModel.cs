@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmHelpers;
+using Rg.Plugins.Popup.Services;
 using Scouts.Events;
 using Scouts.Fetchers;
 using Scouts.Models;
 using Scouts.Settings;
-using Scouts.View;
 using Scouts.View.Pages;
+using Scouts.View.Popups;
 using Xamarin.Forms;
 
 namespace Scouts.ViewModels
@@ -15,8 +17,8 @@ namespace Scouts.ViewModels
     class MessagesPageModel : BaseViewModel
     {
         public ObservableRangeCollection<ChatUserModel> UserCollection { get; set; } = new ObservableRangeCollection<ChatUserModel>();
-        
         public DateTime lastRefreshed;
+        public INavigation Navigation;
 
         public Command ShowOptionsCommand => new Command(ShowOptions);
         public Command RefreshContactsCommand => new Command(RefreshContacts);
@@ -53,8 +55,8 @@ namespace Scouts.ViewModels
                     Color = AppSettings.CurrentUser.Color
                 };
             });
-            
-            await Shell.Current.Navigation.PushModalAsync(new ChatPage(), true);
+
+            await App.Navigation.PushModalAsync(new ChatPage(), true);
             
             IsBusy = false;
         }
@@ -72,7 +74,7 @@ namespace Scouts.ViewModels
             {
                 lastRefreshed = DateTime.Now;
                 
-                userLists.Remove(userLists.Find(x => x.id == AppSettings.CurrentUser.id));
+                userLists.Remove(userLists.Find(x => x.id == AppSettings.CurrentUser?.id));
 
                 userLists.ForEach(user=>
                 {
@@ -92,8 +94,8 @@ namespace Scouts.ViewModels
         
         private async void ShowOptions()
         {
-            OptionsDropdown.DropdownInstance ??= new OptionsDropdown();
-            await Shell.Current.Navigation.PushModalAsync(OptionsDropdown.DropdownInstance, false);
+            if (!PopupNavigation.Instance.PopupStack.Contains(OptionsDropdown.DropdownInstance))
+                await PopupNavigation.Instance.PushAsync(OptionsDropdown.DropdownInstance, false);
         }
     }
 }

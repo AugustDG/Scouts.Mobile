@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Scouts.Dev;
 using Scouts.Models.Enums;
+using Scouts.Settings;
 using Xamarin.Forms;
 
 namespace Scouts.Models
@@ -29,7 +30,7 @@ namespace Scouts.Models
         public string PostedTimeString =>
             PostedTime.ToLocalTime().ToString("MM/dd/yyyy HH:mm", CultureInfo.CreateSpecificCulture("fr-FR"));
 
-        [BsonIgnore] public Color InfoBackColor => Helpers.InfoModelColors[(int) InfoPublicType];
+        [BsonIgnore] public Color InfoBackColor => ColorSettings.InfoModelColors[(int) InfoPublicType];
 
         [BsonIgnore] public Color InfoTextColor
         {

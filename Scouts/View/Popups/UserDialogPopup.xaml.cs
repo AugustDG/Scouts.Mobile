@@ -35,17 +35,6 @@ namespace Scouts.View.Popups
         {
             OpenPopupAnimation();
         }
-        
-        protected override bool OnBackButtonPressed()
-        {
-            if (Shell.Current.Navigation.ModalStack.Count > 0)
-            {
-                ClosePopup();
-                return true;   
-            }
-            else
-                return false;
-        }
 
         public async void OpenPopupAnimation()
         {
@@ -58,7 +47,7 @@ namespace Scouts.View.Popups
             this.ScaleTo(0.8, 100, Easing.SinIn);
             await this.FadeTo(0, 100, Easing.SinIn);
             Scale = 1;
-            await Shell.Current.Navigation.PopModalAsync(false);
+            await App.Navigation.PopModalAsync(false);
         }
 
         private void InputView_OnTextChanged(object sender, TextChangedEventArgs e)

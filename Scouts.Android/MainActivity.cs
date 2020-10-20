@@ -11,17 +11,19 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using FFImageLoading.Forms.Platform;
+using Rg.Plugins.Popup.Services;
 using Scouts.Dev;
 using Scouts.Droid.Dev;
 using Sharpnado.Presentation.Forms.Droid;
 using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
 using Color = Android.Graphics.Color;
+using CarouselViewRenderer = CarouselView.FormsPlugin.Android.CarouselViewRenderer;
 
 namespace Scouts.Droid
 {
-    [Activity(Label = "Scouts", Icon = "@mipmap/icon", Theme = "@style/splashScreen", MainLauncher = true,
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.ColorMode)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    [Activity(Label = "Scouts", Icon = "@mipmap/icon", Theme = "@style/MainTheme", HardwareAccelerated = true, LaunchMode = LaunchMode.SingleTop)]
+    public class MainActivity : FormsAppCompatActivity
     {
         internal static MainActivity Instance { get; private set; }
 
@@ -34,27 +36,23 @@ namespace Scouts.Droid
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-
-            base.Window.RequestFeature(WindowFeatures.ActionBar);
-
-            base.SetTheme(Resource.Style.MainTheme);
+            
+            base.Window?.RequestFeature(WindowFeatures.ActionBar);
+            
             base.OnCreate(savedInstanceState);
-
-            //Forms.SetFlags("Shapes_Experimental");
-            //Forms.SetFlags("SwipeView_Experimental");
-            //Forms.SetFlags("Brush_Experimental");
 
             Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            Forms.Init(this, savedInstanceState);
             CachedImageRenderer.Init(true);
+            CachedImageRenderer.InitImageViewHandler();
             SharpnadoInitializer.Initialize();
             UserDialogs.Init(this);
             Stormlion.PhotoBrowser.Droid.Platform.Init(this);
-
-            base.SetStatusBarColor(Color.Transparent);
-
-            LoadApplication(new App());
+            CarouselViewRenderer.Init();
+            XF.Material.Droid.Material.Init(this, savedInstanceState);
+            Forms.Init(this, savedInstanceState);
+            
+            SetStatusBarColor(Color.Transparent);
 
             if (!IsPlayServiceAvailable())
             {
@@ -63,10 +61,26 @@ namespace Scouts.Droid
             }
 
             CreateNotificationChannel();
+            
+            LoadApplication(new App());
+        }
+
+        public override async void OnBackPressed()
+        {
+            if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed))
+            {
+                if (PopupNavigation.Instance.PopupStack.Count > 0)
+                    await PopupNavigation.Instance.PopAsync();
+            }
+            else
+            {
+                if (Xamarin.Forms.Application.Current.MainPage.Navigation.ModalStack.Count > 0)
+                    await Xamarin.Forms.Application.Current.MainPage.Navigation.PopModalAsync(false);
+            }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions,
-            [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+            [GeneratedEnum] Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 

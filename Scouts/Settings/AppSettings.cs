@@ -2,34 +2,50 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Scouts.Dev;
+using Scouts.Events;
 using Scouts.Models;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using XF.Material.Forms.Resources;
+using XF.Material.Forms.UI.Dialogs.Configurations;
 
 namespace Scouts.Settings
 {
     public static class AppSettings
     {
-        public static UserDataModel CurrentUser { get; set; }
+        public static UserDataModel CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                AppEvents.UserTypeChanged.Invoke(null, EventArgs.Empty);
+                SavedPassword = value?.Password;
+                SavedUserId = value?.UserId;
+                _currentUser = value;
+            }
+        }
+
+        private static UserDataModel _currentUser;
+        
+        public static string SavedUserId
+        {
+            get => Preferences.Get(nameof(SavedUserId), null);
+            set => Preferences.Set(nameof(SavedUserId), value);
+        }
+        
+        public static string SavedPassword
+        {
+            get => Preferences.Get(nameof(SavedPassword), null);
+            set => Preferences.Set(nameof(SavedPassword), value);
+        }
 
         public static DeviceInstallationModel DeviceInstallation { get; set; } = new DeviceInstallationModel
             {InstallationId = Guid.NewGuid().ToString("N")};
 
         public static List<bool> SavedNotificationSubscriptions { get; set; }
-
-        public static bool IsSaveUsername
-        {
-            get => Preferences.Get(nameof(IsSaveUsername), false);
-            set => Preferences.Set(nameof(IsSaveUsername), value);
-        }
-
-        public static bool IsLoginAutomatic
-        {
-            get => Preferences.Get(nameof(IsLoginAutomatic), false);
-            set => Preferences.Set(nameof(IsLoginAutomatic), value);
-        }
 
         public static string PnsId
         {
@@ -95,18 +111,10 @@ namespace Scouts.Settings
 
         private static Action LoadSavedObjects()
         {
-            return async () =>
+            return async() =>
             {
-                var userSavedLoc = $"{FileSystem.AppDataDirectory}/settings/savedUser.json";
                 var installationSavedLoc = $"{FileSystem.AppDataDirectory}/settings/savedInstallation.json";
                 var notifSubsSavedLoc = $"{FileSystem.AppDataDirectory}/settings/savedNotifSubs.json";
-
-                if (File.Exists(userSavedLoc))
-                {
-                    var text = await File.ReadAllTextAsync(userSavedLoc);
-
-                    CurrentUser = JsonConvert.DeserializeObject<UserDataModel>(text);
-                }
 
                 if (File.Exists(installationSavedLoc))
                 {
@@ -132,29 +140,22 @@ namespace Scouts.Settings
             };
         }
 
-        private static Action SaveChangedObjects(string[] objectsToSave)
+        public static Action SaveChangedObjects(string[] objectsToSave)
         {
             return async () =>
             {
-                var canWriteToStorage = await MainThread.InvokeOnMainThreadAsync(async () =>
-                    await Permissions.RequestAsync<Permissions.StorageWrite>());
-
-                while (canWriteToStorage != PermissionStatus.Granted)
+                if (objectsToSave.Contains(nameof(CurrentUser)) && !(CurrentUser is null))
                 {
-                    await Helpers.DisplayMessageAsync("Les permissions suivantes sont requises!");
                     try
                     {
-                        canWriteToStorage = await MainThread.InvokeOnMainThreadAsync(async () =>
-                            await Permissions.RequestAsync<Permissions.StorageWrite>());
+                        Preferences.Set(nameof(CurrentUser), JsonConvert.SerializeObject(CurrentUser));
                     }
                     catch (Exception e)
                     {
                         Helpers.DisplayMessage(e.Message);
                     }
-                }
-
-                if (objectsToSave.Contains(nameof(CurrentUser)) && !(CurrentUser is null))
-                {
+                    
+                    /*
                     try
                     {
                         var userSavedLoc = $"{FileSystem.AppDataDirectory}/settings";
@@ -170,7 +171,7 @@ namespace Scouts.Settings
                     catch (Exception e)
                     {
                         Helpers.DisplayMessage(e.Message);
-                    }
+                    }*/
                 }
 
                 if (objectsToSave.Contains(nameof(DeviceInstallation)) && !(DeviceInstallation is null))

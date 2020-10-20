@@ -19,27 +19,32 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Acr.UserDialogs" Version="7.1.0.446" />
+    <PackageReference Include="Acr.UserDialogs" Version="7.1.0.462" />
     <PackageReference Include="Amporis.Xamarin.Forms.ColorPicker" Version="1.0.23" />
-    <PackageReference Include="Dropbox.Api" Version="5.0.0" />
+    <PackageReference Include="CarouselView.FormsPlugin" Version="5.2.0" />
+    <PackageReference Include="Dropbox.Api" Version="5.1.0" />
     <PackageReference Include="Ical.Net" Version="4.1.11" />
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.4.0" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.7" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.4.3" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.4.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.9" />
     <PackageReference Include="MongoDB.Driver" Version="2.8.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="PhotoBrowser.Forms" Version="0.1.4" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.4" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.6" />
+    <PackageReference Include="SegmentedControl.FormsPlugin" Version="2.0.1" />
     <PackageReference Include="Sharpnado.Presentation.Forms" Version="1.7.1" />
-    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.2.0.55" />
-    <PackageReference Include="Syncfusion.Xamarin.Core" Version="18.2.0.55" />
-    <PackageReference Include="Syncfusion.Xamarin.SfSchedule" Version="18.2.0.55" />
-    <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.3.0.40" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="18.3.0.40" />
+    <PackageReference Include="Syncfusion.Xamarin.SfRichTextEditor" Version="18.3.0.40" />
+    <PackageReference Include="Syncfusion.Xamarin.SfSchedule" Version="18.3.0.40" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" />  
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1560" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />  
+    <PackageReference Include="Xamarin.Plugin.Calendar" Version="1.2.1506" />  
+    <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.41" />  
+    <PackageReference Include="XF.Material" Version="1.7.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,9 +62,6 @@
     </Compile>
     <Compile Update="View\AddNewsItemPage.xaml.cs">
       <DependentUpon>AddNewsItemPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="View\OptionsDropdown.xaml.cs">
-      <DependentUpon>GeneralOptionsDropOut.xaml</DependentUpon>
     </Compile>
     <Compile Update="View\Popups\InfoDetailsPopup.xaml.cs">
       <DependentUpon>PopupPageDetails.xaml</DependentUpon>
@@ -112,6 +114,14 @@
     <Compile Update="View\Popups\UserDialogPopup.xaml.cs">
       <DependentUpon>UserDialogPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Update="View\Popups\OptionsDropdown.xaml.cs">
+      <DependentUpon>OptionsDropdown.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -126,10 +136,6 @@
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\AddNewsItemPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\OptionsDropdown.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>

@@ -1,45 +1,33 @@
-﻿using Scouts.ViewModels;
+﻿
+using Scouts.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Scouts.View
+namespace Scouts.View.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage
     {
-        private LoginPageModel _pageModel;
-
+        private LoginPageModel _page;
+        
         public LoginPage()
         {
             InitializeComponent();
-
-            _pageModel = new LoginPageModel(this);
-            BindingContext = _pageModel;
+            
+            _page = new LoginPageModel(this) {Navigation = Navigation};
+            BindingContext = _page;
         }
 
         protected override void OnSizeAllocated(double width, double height)
         {
-            _pageModel.CheckMargin = width > height ? new Thickness(35,0, 0, 0) : new Thickness(20,0, 0, 0);
-            base.OnSizeAllocated(width, height);
-        }
+            _page.CheckMargin = width > height ? new Thickness(35, 0, 0, 0) : new Thickness(20, 0, 0, 0);
 
-        protected override bool OnBackButtonPressed()
-        {
-            if (Shell.Current.Navigation.ModalStack.Count > 0)
-                return false;
-            else
-                return true;
+            base.OnSizeAllocated(width, height);
         }
 
         public async void AnimateEntry()
         {
             await SignInFrame.FadeTo(1.0, 300, Easing.CubicInOut);
-        }
-
-        public async void CloseLogin()
-        {
-            await Shell.Current.GoToAsync("///main/infos");
-            //Shell.Current.SendAppearing();
         }
     }
 }

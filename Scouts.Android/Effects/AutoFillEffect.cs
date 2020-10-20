@@ -1,7 +1,6 @@
 ﻿using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
 using System;
-using System.Reflection;
 using System.ComponentModel;
 using Scouts.Droid.Effect;
 using Scouts.PlatformConfiguration.AndroidSpecific;

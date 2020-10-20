@@ -1,8 +1,13 @@
 ﻿using System.Collections.Generic;
 using MvvmHelpers;
+using Rg.Plugins.Popup.Services;
+using Scouts.Events;
 using Scouts.Models;
+using Scouts.Settings;
+using Scouts.View.Popups;
 using Stormlion.PhotoBrowser;
 using Xamarin.Forms;
+using Command = MvvmHelpers.Commands.Command;
 
 namespace Scouts.ViewModels
 {
@@ -33,9 +38,27 @@ namespace Scouts.ViewModels
         private Color _infoButtColor;
 
         public Command ShowImageCommand => new Command(ShowImage);
+        public Command ClosePopupCommand => new Command(ClosePopup);
 
-        public void Init()
+        private InfoDetailsPopup _popup;
+
+        public InfoDetailsPopupModel(InfoDetailsPopup pop)
         {
+            _popup = pop;
+            
+            AppEvents.OpenInfoDetails += LoadDetails;
+        }
+        
+        
+        public async void ClosePopup()
+        {
+            await PopupNavigation.Instance.PopAsync();
+        }
+
+        private void LoadDetails(object sender, InfoModel infoModel)
+        {
+            CurrentModel = infoModel;
+            
             var backColor = Color.FromHsla(CurrentModel.InfoBackColor.Hue, CurrentModel.InfoBackColor.Saturation,
                 CurrentModel.InfoBackColor.Luminosity);
             InfoButtColor = backColor.WithLuminosity(0.9);
@@ -48,6 +71,8 @@ namespace Scouts.ViewModels
             if (CurrentModel.Image is null)
                 return;
 
+            var uriSource = (UriImageSource) CurrentModel.Image;
+
             new PhotoBrowser
             {
                 Photos = new List<Photo>
@@ -55,7 +80,7 @@ namespace Scouts.ViewModels
                     new Photo
                     {
                         Title = "",
-                        URL = $"file://{CurrentModel.Image}"
+                        URL = uriSource.Uri.AbsoluteUri
                     }
                 }
             }.Show();

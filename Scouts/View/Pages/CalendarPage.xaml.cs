@@ -20,7 +20,7 @@ namespace Scouts.View.Pages
             BindingContext = _pageModel;
         }
 
-        protected override async void OnAppearing()
+        protected async void OnAppearing()
         {
             if (DateTime.Now > _pageModel.lastRefreshed.Add(new TimeSpan(0, 15, 0)))
                 _pageModel.RefreshCommand.Execute(null);

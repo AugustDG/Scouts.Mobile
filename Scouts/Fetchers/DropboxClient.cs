@@ -48,15 +48,28 @@ namespace Scouts.Fetchers
                 Debug.WriteLine(e);
             }
         }
+        
+        public async Task<string> GetImageUrl(string folderName)
+        {
+            try
+            {
+                return (await _client.Files.GetTemporaryLinkAsync($"/Scouts/Infos/{folderName}/Image1.jpg")).Link;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return "Failed";
+            }
+        }
 
-        public async Task UploadImage(byte[] bytes, string folderName)
+        public async Task UploadImage(byte[] bytes, string folderName, string fileName = "Image1.jpg")
         {
             try
             {
                 using var mem = new MemoryStream(bytes);
 
                 var updated = await _client.Files.UploadAsync(
-                    $"/Scouts/Infos/{folderName}/Image1.jpg",
+                    $"/Scouts/Infos/{folderName}/{fileName}",
                     WriteMode.Overwrite.Instance,
                     body: mem);
 

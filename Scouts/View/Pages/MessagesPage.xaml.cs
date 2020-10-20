@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Scouts.Dev;
+using Scouts.Events;
 using Scouts.Models;
 using Scouts.ViewModels;
 using Xamarin.Forms;
@@ -17,12 +18,13 @@ namespace Scouts.View.Pages
         {
             InitializeComponent();
 
-            _pageModel = new MessagesPageModel();
-
+            _pageModel = new MessagesPageModel {Navigation = Navigation};
             BindingContext = _pageModel;
+
+            AppEvents.PageIndexChanged += OnPageIndexChanged;
         }
 
-        protected override async void OnAppearing()
+        private async void OnPageIndexChanged(object sender, EventArgs e)
         {
             if (DateTime.Now > _pageModel.lastRefreshed.Add(new TimeSpan(0, 15, 0)))
                 _pageModel.RefreshContactsCommand.Execute(null);

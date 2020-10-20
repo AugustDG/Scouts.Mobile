@@ -111,7 +111,7 @@ namespace Scouts.Fetchers
             {
                 //creates a [filter] to find one document by name
                 var builder = Builders<UserDataModel>.Filter;
-                var filter = builder.Eq(model => model.UserId, username);
+                var filter = builder.Eq(model => model.Username, username);
 
                 //finds the documents and returns the first one
                 var userFound = await UserCollection.FindAsync(filter).Result.FirstOrDefaultAsync();
@@ -133,6 +133,21 @@ namespace Scouts.Fetchers
 
                 return userFound;
             });
+        }
+        
+        public UserDataModel GetOneUserModelById(string userId)
+        {
+            return Task.Run(async () =>
+            {
+                //creates a [filter] to find one document by name
+                var builder = Builders<UserDataModel>.Filter;
+                var filter = builder.Eq(model => model.UserId, userId);
+
+                //finds the documents and returns the first one
+                var userFound = await UserCollection.FindAsync(filter).Result.FirstOrDefaultAsync();
+
+                return userFound;
+            }).Result;
         }
 
         public List<UserDataModel> GetAllUserModels(UserType type = UserType.None)

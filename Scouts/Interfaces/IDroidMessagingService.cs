@@ -1,6 +1,6 @@
 ﻿namespace Scouts.Interfaces
 {
-    public interface IDroidMessagingService
+    public interface IMessagingService
     {
         public void WipeToken();
     }

@@ -4,7 +4,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:syncInput="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
              x:Class="Scouts.View.Pages.ChatPage"
-             BackgroundColor="{DynamicResource MainBackgroundColor}">
+             BackgroundColor="{DynamicResource MainBackgroundColor}"
+             
+             Shell.PresentationMode="ModalAnimated"
+             Shell.NavBarIsVisible="False">
 
     <StackLayout BackgroundColor="{DynamicResource MainBackgroundColor}">
 

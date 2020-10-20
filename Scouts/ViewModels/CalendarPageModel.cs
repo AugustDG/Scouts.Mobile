@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using Ical.Net.CalendarComponents;
-using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Rg.Plugins.Popup.Services;
 using Scouts.Annotations;
-using Scouts.Dev;
 using Scouts.Events;
 using Scouts.Fetchers;
-using Scouts.View;
+using Scouts.Settings;
 using Scouts.View.Pages;
+using Scouts.View.Popups;
 using Syncfusion.SfSchedule.XForms;
 using Xamarin.Forms;
 
@@ -104,7 +104,7 @@ namespace Scouts.ViewModels
         public CalendarPageModel(CalendarPage pg)
         {
             _page = pg;
-
+            
             AppEvents.WipeAllUserData += WipeAllData;
         }
 
@@ -129,13 +129,14 @@ namespace Scouts.ViewModels
                    appointment.EndTime.ToString("HH:mm", CultureInfo.CreateSpecificCulture("fr-FR"));
             PopupSource = null;
 
-            await Shell.Current.Navigation.PushModalAsync(_popup, false);
+            if (!PopupNavigation.Instance.PopupStack.Contains(_popup))
+                await PopupNavigation.Instance.PushAsync(_popup, false);
         }
 
         private async void ShowOptionsDropdown()
         {
-            OptionsDropdown.DropdownInstance ??= new OptionsDropdown();
-            await Shell.Current.Navigation.PushModalAsync(OptionsDropdown.DropdownInstance, false);
+            if (!PopupNavigation.Instance.PopupStack.Contains(OptionsDropdown.DropdownInstance))
+                await PopupNavigation.Instance.PushAsync(OptionsDropdown.DropdownInstance, false);
         }
 
         #region CalendarLogic

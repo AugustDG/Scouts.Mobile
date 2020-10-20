@@ -9,12 +9,20 @@
              Shell.PresentationMode="ModalAnimated">
     <ContentPage.Content>
 
-        <ActivityIndicator HorizontalOptions="CenterAndExpand"
-                           VerticalOptions="CenterAndExpand"
-                           IsRunning="True"    
+        <StackLayout HorizontalOptions="CenterAndExpand"
+                     VerticalOptions="CenterAndExpand">
+            <Image HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Source="@drawable/logo_200"
+                   Margin="0, 0, 0, 50"/>
+        
+            <ActivityIndicator HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               IsRunning="True"    
 
-                           BackgroundColor="{DynamicResource MainBackgroundColor}"
-                           Color="{StaticResource SyncPrimaryColor}" />
+                               BackgroundColor="{DynamicResource MainBackgroundColor}"
+                               Color="{StaticResource SyncPrimaryColor}" />
+        </StackLayout>
 
     </ContentPage.Content>
 </ContentPage>

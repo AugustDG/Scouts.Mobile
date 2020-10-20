@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<popup:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:shades="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
+                 x:Class="Scouts.View.Popups.OptionsDropdown"
+
+                 HasKeyboardOffset="False"
+                 HasSystemPadding="False"
+                 CloseWhenBackgroundIsClicked="False">
+
+    <StackLayout BackgroundColor="Transparent">
+
+        <Frame HorizontalOptions="FillAndExpand"
+               Padding="0"
+               Margin="0 ,0, 0, -10"
+
+               HasShadow="True"
+
+               BackgroundColor="{DynamicResource SecondaryBackgroundColor}">
+            <Label Text="OPTIONS"
+                   FontSize="30"
+                   TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+
+                   Margin="0, 20, 0, 5"
+                   HorizontalOptions="CenterAndExpand"
+
+                   BackgroundColor="Transparent" />
+        </Frame>
+
+        <ScrollView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.45*" />
+                    <RowDefinition Height="0.4*" />
+                </Grid.RowDefinitions>
+
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding ClosePopupCommand}" />
+                </Grid.GestureRecognizers>
+
+                <AbsoluteLayout x:Name="OptionsLayout" Grid.Row="0">
+                    <!--
+                    <shades:Shadows CornerRadius="65"
+                                    AbsoluteLayout.LayoutFlags="PositionProportional"
+                                    AbsoluteLayout.LayoutBounds="0.5,1.2,115,115"
+                                    Shades="{shades:SingleShade Offset='5, 10', Color=Black, Opacity=0.6, BlurRadius=5}"
+                                    Margin="0, -10, 0, 0">
+                        <Frame CornerRadius="65"
+
+                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                               AbsoluteLayout.LayoutBounds="0.5,1.2,115,115"
+
+                               Padding="0"
+
+                               BackgroundColor="Transparent" />
+                    </shades:Shadows>
+                    -->
+                    
+                    <!--
+                    <shades:Shadows CornerRadius="0"
+                                    AbsoluteLayout.LayoutFlags="All"
+                                    AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                    Shades="{shades:SingleShade Offset='5, 10', Color=Black, Opacity=0.6, BlurRadius=5}"
+                                    Margin="0, -10, 0, 0">
+                                    -->
+                        <Frame CornerRadius="10"
+                               Padding="0, 20, 0, 80"
+
+                               AbsoluteLayout.LayoutFlags="All"
+                               AbsoluteLayout.LayoutBounds="0,0,1,1"
+
+                               BackgroundColor="{DynamicResource SecondaryBackgroundColor}">
+                            <StackLayout VerticalOptions="CenterAndExpand"
+                                         HorizontalOptions="FillAndExpand"
+                                         Margin="25, 0, 25, 0">
+                                <shades:Shadows Shades="{shades:SingleShade Offset='2, 4', Color=Black, Opacity=0.3, BlurRadius=6}">
+                                <Button Text="RÉGLAGES"
+                                        Margin="10, 5, 10, 0"
+                                        FontSize="20"
+                                        CornerRadius="5"
+
+                                        Command="{Binding ShowSettingsPageCommand}"
+
+                                        BackgroundColor="{DynamicResource SecondaryForegroundColor}"
+                                        TextColor="{StaticResource SyncPrimaryForegroundColor}" />
+                                </shades:Shadows>
+                                
+                                <shades:Shadows Shades="{shades:SingleShade Offset='2, 4', Color=Black, Opacity=0.3, BlurRadius=6}">
+                                <Button Text="CONFIDENTIALITÉ"
+                                        Margin="10, 7, 10, 0"
+                                        FontSize="20"
+                                        CornerRadius="5"
+
+                                        BackgroundColor="{DynamicResource SecondaryForegroundColor}"
+                                        TextColor="{StaticResource SyncPrimaryForegroundColor}" />
+                                </shades:Shadows>
+                                
+                                <shades:Shadows Shades="{shades:SingleShade Offset='2, 4', Color=Black, Opacity=0.3, BlurRadius=6}">
+                                <Button Text="CONTACTEZ-NOUS"
+                                        Margin="10, 7, 10, 0"
+                                        FontSize="20"
+                                        CornerRadius="5"
+
+                                        BackgroundColor="{DynamicResource SecondaryForegroundColor}"
+                                        TextColor="{StaticResource SyncPrimaryForegroundColor}" />
+                                </shades:Shadows>
+                                
+                                <shades:Shadows Shades="{shades:SingleShade Offset='2, 4', Color=Black, Opacity=0.3, BlurRadius=6}">
+                                <Button Text="DÉCONNECTER"
+                                        Margin="10, 7, 10, 7"
+                                        FontSize="20"
+                                        CornerRadius="5"
+
+                                        Command="{Binding DisconnectCommand}"
+
+                                        BackgroundColor="{DynamicResource SecondaryForegroundColor}"
+                                        TextColor="{StaticResource SyncPrimaryColor}" />
+                                </shades:Shadows>
+                            </StackLayout>
+                        </Frame>
+
+
+                    <Frame CornerRadius="65"
+
+                           AbsoluteLayout.LayoutFlags="PositionProportional"
+                           AbsoluteLayout.LayoutBounds="0.5,1.2,115,115"
+
+                           Padding="0"
+
+                           BackgroundColor="{DynamicResource SecondaryBackgroundColor}">
+                        <!--<shades:Shadows CornerRadius="60"
+                                        Shades="{shades:SingleShade Offset='1, 3', Color=Black, Opacity=0.6, BlurRadius=5}">-->
+                            <Frame HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+
+                                   HeightRequest="80"
+                                   WidthRequest="80"
+
+                                   Padding="9"
+
+                                   CornerRadius="60"
+
+                                   BackgroundColor="{DynamicResource UserColor}">
+                                <Image Source="@drawable/user_128" />
+                            </Frame>
+                    </Frame>
+
+                    <Label Text="{Binding CurrentUsername}"
+                           FontSize="16"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Start"
+                           TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+
+                           AbsoluteLayout.LayoutFlags="All"
+                           AbsoluteLayout.LayoutBounds=".12,0.965,0.29,0.08" />
+
+                    <Label Text="{Binding CurrentUserType}"
+                           FontSize="16"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="End"
+                           TextColor="{DynamicResource SyncPrimaryForegroundColor}"
+
+                           AbsoluteLayout.LayoutFlags="All"
+                           AbsoluteLayout.LayoutBounds=".88,0.965,0.29,0.08" />
+
+                </AbsoluteLayout>
+            </Grid>
+        </ScrollView>
+    </StackLayout>
+</popup:PopupPage>

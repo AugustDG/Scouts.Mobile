@@ -6,15 +6,15 @@
                  xmlns:syncButtons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
                  x:Class="Scouts.View.Popups.FilterPopup"
                  HasKeyboardOffset="False"
-                 HasSystemPadding="False"
+                 HasSystemPadding="True"
                  Opacity="0"
-                 TranslationY="-500">
-    
-    <Frame Margin="0, 200, 0, -10"
+                 TranslationY="500">
+
+    <Frame Margin="-5, 200, -5, 0"
            Padding="0"
            CornerRadius="10"
            BackgroundColor="{DynamicResource SecondaryBackgroundColor}">
-        <StackLayout>
+        <StackLayout Margin="5, 0">
             <Label Text="FILTRE"
                    FontSize="30"
                    HorizontalTextAlignment="Center"
@@ -24,7 +24,7 @@
                    HorizontalOptions="FillAndExpand"
 
                    TextColor="{DynamicResource SyncPrimaryForegroundColor}" />
-            
+
             <Picker Title="Public concerné"
                     TitleColor="{DynamicResource SyncPrimaryForegroundColor}"
                     SelectedIndex="{Binding InfoPublicType}"
@@ -44,7 +44,7 @@
                     </x:Array>
                 </Picker.ItemsSource>
             </Picker>
-            
+
             <Picker Title="Type d'évènement"
                     TitleColor="{DynamicResource SyncPrimaryForegroundColor}"
                     SelectedIndex="{Binding InfoEventType}"
@@ -67,9 +67,9 @@
                                     Style="{StaticResource CheckStyle}"
 
                                     Margin="30, 0, 0, 0" />
-            
+
             <StackLayout Orientation="Horizontal"
-                         
+
                          VerticalOptions="EndAndExpand"
                          HorizontalOptions="FillAndExpand"
                          Margin="0, 0, 0, 25">
@@ -79,7 +79,7 @@
                         HorizontalOptions="FillAndExpand"
                         Margin="10, 0, 5, 0"
                         CornerRadius="5"
-                    
+
                         Command="{Binding ClearFilterCommand}"
 
                         BackgroundColor="{DynamicResource SecondaryForegroundColor}"
@@ -91,7 +91,7 @@
                         HorizontalOptions="FillAndExpand"
                         Margin="5, 0, 10, 0"
                         CornerRadius="5"
-                    
+
                         Command="{Binding CloseFilterCommand}"
 
                         BackgroundColor="{DynamicResource SecondaryForegroundColor}"

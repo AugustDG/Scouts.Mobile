@@ -7,9 +7,7 @@
                  x:Class="Scouts.View.Popups.ColorPickerPopup"
                  HasKeyboardOffset="False"
                  HasSystemPadding="False"
-                 CloseWhenBackgroundIsClicked="False"
-                 Opacity="0"
-                 Scale="1.2">
+                 CloseWhenBackgroundIsClicked="False">
 
     <Frame Margin="20, 150, 20, 125"
            Padding="0"

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:pages="clr-namespace:Scouts.View.Pages;assembly=Scouts"
+             xmlns:popups="clr-namespace:Scouts.View.Popups;assembly=Scouts"
+             xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.Presentation.Forms"
+             xmlns:tabs="clr-namespace:Sharpnado.Presentation.Forms.CustomViews.Tabs;assembly=Sharpnado.Presentation.Forms"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:shades="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
+             mc:Ignorable="d"
+             x:Class="Scouts.MainPage"
+             BackgroundColor="{DynamicResource MainForegroundColor}">
+    
+    <NavigationPage.HasNavigationBar>False</NavigationPage.HasNavigationBar>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="tabs:BottomTabItem">
+                <Setter Property="SelectedTabColor" Value="#6E389e32" />
+                <Setter Property="UnselectedLabelColor" Value="{DynamicResource SyncPrimaryForegroundColor}" />
+                <Setter Property="UnselectedIconColor" Value="Transparent" />
+                <Setter Property="LabelSize" Value="18" />
+                <Setter Property="IconSize" Value="28" />
+                <Setter Property="IsTextVisible" Value="True" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <Grid ColumnSpacing="0" RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.9*" />
+                <RowDefinition Height="0.1*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <tabs:ViewSwitcher x:Name="Switcher"
+                               Grid.Row="0"
+                               Animate="True"
+                               SelectedIndex="{Binding SelectedPageIndex, Mode=TwoWay}">
+                <pages:InfoPage />
+                <pages:CalendarPage />
+                <pages:MessagesPage />
+                <pages:GamesPage />
+            </tabs:ViewSwitcher>
+
+            <tabs:TabHostView Grid.Row="1"
+                              TabType="Fixed"
+                              SelectedIndex="{Binding Source={x:Reference Switcher}, Path=SelectedIndex, Mode=TwoWay}"
+
+                              HorizontalOptions="FillAndExpand"
+                              VerticalOptions="FillAndExpand"
+                              
+                              BackgroundColor="{DynamicResource MainBackgroundColor}">
+                <tabs:TabHostView.Tabs>
+                    <tabs:BottomTabItem IconImageSource="@drawable/info"
+                                        Label="INFOS"
+                                        IsVisible="{Binding EnabledPages[0]}"/>
+                    <tabs:BottomTabItem IconImageSource="@drawable/calendar"
+                                        Label="CALENDRIER"
+                                        IsVisible="{Binding EnabledPages[1]}"/>
+                    <tabs:BottomTabItem IconImageSource="@drawable/chat"
+                                        Label="MESSAGES"
+                                        IsVisible="{Binding EnabledPages[2]}"/>
+                    <tabs:BottomTabItem IconImageSource="@drawable/controller"
+                                        Label="JEUX"
+                                        IsVisible="{Binding EnabledPages[3]}"/>
+                </tabs:TabHostView.Tabs>
+            </tabs:TabHostView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

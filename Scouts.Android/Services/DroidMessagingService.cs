@@ -18,7 +18,7 @@ namespace Scouts.Droid.Services
 {
     [Service]
     [IntentFilter(new[] {"com.google.firebase.MESSAGING_EVENT"})]
-    public class DroidMessagingService : FirebaseMessagingService, IDroidMessagingService
+    public class DroidMessagingService : FirebaseMessagingService, IMessagingService
     {
         public override void OnNewToken(string token)
         {

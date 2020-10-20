@@ -2,8 +2,11 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
+using Scouts.Settings;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using XF.Material.Forms.UI.Dialogs;
+using XF.Material.Forms.UI.Dialogs.Configurations;
 
 namespace Scouts.Dev
 {
@@ -18,21 +21,6 @@ namespace Scouts.Dev
         /// Capacity of the Notification Subscriptions array
         /// </summary>
         public static int NotificationSubscriptionsQuantity = 8;
-
-        /// <summary>
-        /// InfoModel colors according to target public
-        /// </summary>
-        public static Color[] InfoModelColors = new[]
-        {
-            Color.FromRgb(50, 222, 138),
-            Color.FromRgb(0, 105, 146),
-            Color.FromRgb(70, 34, 85),
-            Color.FromRgb(240, 58, 71),
-            Color.FromRgb(255, 74, 28),
-            Color.FromRgb(229, 99, 153),
-            Color.FromRgb(244, 224, 77),
-            Color.FromRgb(37, 37, 37),
-        };
 
         /// <summary>
         /// Generates  a random alphanumeric string!
@@ -94,7 +82,7 @@ namespace Scouts.Dev
         /// <returns></returns>
         public static void DisplayMessage(string msg)
         {
-            MainThread.BeginInvokeOnMainThread(async () => await Shell.Current.DisplayAlert("Message", msg, "Ok"));
+            MainThread.BeginInvokeOnMainThread(async () => await MaterialDialog.Instance.ConfirmAsync(msg, "Message", "Ok", configuration: ColorSettings.DefaultMaterialAlertDialogConfiguration));
         }
         
         /// <summary>
@@ -103,7 +91,7 @@ namespace Scouts.Dev
         /// <returns></returns>
         public static Task DisplayMessageAsync(string msg)
         {
-            return MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.DisplayAlert("Message", msg, "Ok"));
+            return MainThread.InvokeOnMainThreadAsync(async () => await MaterialDialog.Instance.ConfirmAsync(msg,"Message" , "Ok", configuration: ColorSettings.DefaultMaterialAlertDialogConfiguration));
         }
     }
 }

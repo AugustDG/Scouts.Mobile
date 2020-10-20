@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Acr.UserDialogs;
 using MvvmHelpers;
+using Rg.Plugins.Popup.Services;
 using Scouts.Fetchers;
 using Scouts.Models.Enums;
 using Scouts.Security;
@@ -42,42 +43,6 @@ namespace Scouts.ViewModels
         }
 
         private bool _hasChanges;
-
-        public bool IsSaveUsernameCheck
-        {
-            get => AppSettings.IsSaveUsername;
-            set
-            {
-                if (value != AppSettings.IsSaveUsername) HasChanges = true;
-                AppSettings.IsSaveUsername = value;
-                SetProperty(ref _isSaveUsername, value);
-            }
-        }
-
-        private bool _isSaveUsername;
-
-        public bool IsLoginAutomaticCheck
-        {
-            get => AppSettings.IsLoginAutomatic;
-            set
-            {
-                if (value != AppSettings.IsLoginAutomatic)
-                {
-                    /*UserDialogs.Instance.Toast(value
-                            ? "En activant la rentrée automatique, vous recevrez toutes les notifications sélectionnées!"
-                            : "En désactivant la rentrée automatique, vous ne recevrez plus les notifications choisies!",
-                        TimeSpan.FromSeconds(2.5));*/
-
-                    HasChanges = true;
-                }
-
-                IsSaveUsernameCheck = value;
-                AppSettings.IsLoginAutomatic = value;
-                SetProperty(ref _isLoginAutomatic, value);
-            }
-        }
-
-        private bool _isLoginAutomatic;
 
         public string NewUsername
         {
@@ -181,14 +146,14 @@ namespace Scouts.ViewModels
                 BindingContext = this
             };
 
-            await Shell.Current.Navigation.PushModalAsync(_colorPickerPopup, false);
+            await App.Navigation.PushModalAsync(_colorPickerPopup, false);
         }
 
-        private void CloseColorPicker()
+        private async void CloseColorPicker()
         {
-            _colorPickerPopup?.ClosePopup();
-
             ChangeColor();
+            
+            await PopupNavigation.Instance.PopAsync();
         }
 
         private async void ChangeUsername()
@@ -234,7 +199,7 @@ namespace Scouts.ViewModels
                 }
             };
 
-            await Shell.Current.Navigation.PushModalAsync(dialogPopup, false);
+            await App.Navigation.PushModalAsync(dialogPopup, false);
         }
 
         private async void ChangePassword()
@@ -280,7 +245,7 @@ namespace Scouts.ViewModels
                 }
             };
 
-            await Shell.Current.Navigation.PushModalAsync(dialogPopup, false);
+            await App.Navigation.PushModalAsync(dialogPopup, false);
         }
 
         private void ChangeColor()
@@ -297,10 +262,6 @@ namespace Scouts.ViewModels
         private async void SaveChanges()
         {
             if (!HasChanges) return;
-
-            //Resets HasChanges
-            if (_isLoginAutomatic == AppSettings.IsLoginAutomatic) HasChanges = false;
-            if (_isSaveUsername == AppSettings.IsSaveUsername) HasChanges = false;
 
             //Notifications saving
             if (_notificationsChanged)
@@ -358,8 +319,6 @@ namespace Scouts.ViewModels
             {
                 var newHashedPass = PasswordStorage.CreateHash(_newPassword);
 
-                if (AppSettings.IsLoginAutomatic) AppSettings.CurrentUser.Password = newHashedPass;
-
                 var nbUsersChanged = await MongoClient.Instance.UpdateUsersAsync(newHashedPass, "Password",
                     $"UserId+{AppSettings.CurrentUser.UserId}", UpdateType.MatchSpecificField);
 
@@ -396,10 +355,10 @@ namespace Scouts.ViewModels
                     "Êtes-vous sûr de vouloir quitter sans sauvegarder?",
                     "Attention", "Oui!", "Non...");
 
-                if (willQuit) await Shell.Current.Navigation.PopModalAsync();
+                if (willQuit) await App.Navigation.PopModalAsync();
             }
             else
-                await Shell.Current.Navigation.PopModalAsync();
+                await App.Navigation.PopModalAsync();
         }
     }
 }

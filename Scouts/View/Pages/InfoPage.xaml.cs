@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Scouts.Dev;
+using Scouts.Events;
 using Scouts.Models;
 using Scouts.ViewModels;
 using Xamarin.Forms;
@@ -9,7 +10,7 @@ using Xamarin.Forms.Xaml;
 namespace Scouts.View.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class InfoPage : ContentPage
+    public partial class InfoPage 
     {
         private InfoPageModel _pageModel;
 
@@ -19,11 +20,13 @@ namespace Scouts.View.Pages
 
             _pageModel = new InfoPageModel(this);
             BindingContext = _pageModel;
+            
+            AppEvents.PageIndexChanged += OnPageIndexChanged;
         }
 
-        protected override async void OnAppearing()
+        private async void OnPageIndexChanged(object sender, EventArgs e)
         {
-            if (DateTime.Now > _pageModel.lastRefreshed.Add(new TimeSpan(0, 15, 0)))
+            if (DateTime.Now > _pageModel.LastRefreshed.Add(new TimeSpan(0, 15, 0)))
                 _pageModel.RefreshCommand.Execute(null);
             else
             {
@@ -50,6 +53,7 @@ namespace Scouts.View.Pages
 
         private void SwipeItemView_OnInvoked(object sender, EventArgs e)
         {
+            _pageModel.CanShowDeets = false;
             _pageModel.DeleteItemCommand.Execute((InfoModel)((SwipeItemView) sender).BindingContext);
         }
     }
