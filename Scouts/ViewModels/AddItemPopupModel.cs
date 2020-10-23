@@ -200,8 +200,8 @@ namespace Scouts.ViewModels
             TitleHasError = false;
             ContentHasError = false;
 
-            var titleRegex = new Regex("^(?=.{2,500}$)");
-            var contentRegex = new Regex("^(?=.{2,5000}$)");
+            var titleRegex = new Regex("(?=.{2,500}$)");
+            var contentRegex = new Regex("(?=.{2,5000}$)");
 
             if (string.IsNullOrWhiteSpace(PostTitle))
             {
