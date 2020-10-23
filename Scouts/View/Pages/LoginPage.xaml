@@ -99,6 +99,10 @@
 
                                            ReturnCommand="{Binding CheckUserCommand}" />
                                 </syncInput:SfTextInputLayout>
+                                
+                                <Label Text="Pour créer un compte, ayez votre code d'accès, tapez un nom d'utilisateur et appuyez sur ACCÉDER =D"
+                                       HorizontalOptions="CenterAndExpand"
+                                       HorizontalTextAlignment="Center"/>
                             </StackLayout>
                         </ScrollView>
 

@@ -21,10 +21,11 @@ namespace Scouts.Settings
             get => _currentUser;
             set
             {
-                AppEvents.UserTypeChanged.Invoke(null, EventArgs.Empty);
                 SavedPassword = value?.Password;
                 SavedUserId = value?.UserId;
                 _currentUser = value;
+                
+                AppEvents.UserTypeChanged.Invoke(null, EventArgs.Empty);
             }
         }
 

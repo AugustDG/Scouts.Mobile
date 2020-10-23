@@ -92,6 +92,8 @@
                                         Margin="10, 7, 10, 0"
                                         FontSize="20"
                                         CornerRadius="5"
+                                        
+                                        IsEnabled="False"
 
                                         BackgroundColor="{DynamicResource SecondaryForegroundColor}"
                                         TextColor="{StaticResource SyncPrimaryForegroundColor}" />
@@ -102,6 +104,8 @@
                                         Margin="10, 7, 10, 0"
                                         FontSize="20"
                                         CornerRadius="5"
+                                        
+                                        IsEnabled="False"
 
                                         BackgroundColor="{DynamicResource SecondaryForegroundColor}"
                                         TextColor="{StaticResource SyncPrimaryForegroundColor}" />

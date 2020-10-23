@@ -10,7 +10,7 @@ namespace Scouts.Events
         public static EventHandler PageIndexChanged;
         public static EventHandler<int> SwitchHomePage;
         public static EventHandler UserTypeChanged;
-        
+
         //Info Page Events
         public static EventHandler ClearFilter;
         public static EventHandler<FilterEventArgs> FilterInfos;

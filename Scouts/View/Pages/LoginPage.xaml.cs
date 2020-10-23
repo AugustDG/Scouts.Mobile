@@ -18,6 +18,11 @@ namespace Scouts.View.Pages
             BindingContext = _page;
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            return false;
+        }
+
         protected override void OnSizeAllocated(double width, double height)
         {
             _page.CheckMargin = width > height ? new Thickness(35, 0, 0, 0) : new Thickness(20, 0, 0, 0);

@@ -56,7 +56,7 @@ namespace Scouts.ViewModels
                     break;
                 case UserType.Counselor:
                     EnabledPages[0] = true;
-                    EnabledPages[1] = true;
+                    EnabledPages[1] = false;
                     EnabledPages[2] = true;
                     EnabledPages[3] = false;
                     break;

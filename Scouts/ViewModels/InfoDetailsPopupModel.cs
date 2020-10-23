@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AppCenter.Crashes;
 using MvvmHelpers;
 using Rg.Plugins.Popup.Services;
 using Scouts.Events;
@@ -68,22 +70,29 @@ namespace Scouts.ViewModels
 
         private void ShowImage()
         {
-            if (CurrentModel.Image is null)
-                return;
-
-            var uriSource = (UriImageSource) CurrentModel.Image;
-
-            new PhotoBrowser
+            try
             {
-                Photos = new List<Photo>
+                if (CurrentModel.Image?.AutomationId == null)
+                    return;
+
+                var uriSource = (UriImageSource) CurrentModel.Image;
+
+                new PhotoBrowser
                 {
-                    new Photo
+                    Photos = new List<Photo>
                     {
-                        Title = "",
-                        URL = uriSource.Uri.AbsoluteUri
+                        new Photo
+                        {
+                            Title = "",
+                            URL = uriSource.Uri.AbsoluteUri
+                        }
                     }
-                }
-            }.Show();
+                }.Show();
+            }
+            catch (Exception e)
+            {
+                Crashes.TrackError(e, new Dictionary<string, string>() {{CurrentModel.Title, CurrentModel.Image.ToString()}});
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json;
 using Scouts.Models;
 using Scouts.Settings;
@@ -14,49 +15,56 @@ namespace Scouts.Services
         public static async void CreateOrUpdateServerInstallation(List<string> tagsAdd = null,
             List<string> tagsRemove = null)
         {
-            var installationModel = new DeviceInstallationModel
+            try
             {
-                InstallationId = AppSettings.DeviceInstallation?.InstallationId,
-                PushChannel = AppSettings.PnsId,
-                Tags = AppSettings.DeviceInstallation?.Tags ?? new List<string>()
-            };
-
-            tagsAdd?.ForEach(s =>
-            {
-                if (!installationModel.Tags.Contains(s))
-                    installationModel.Tags.Add(s);
-            });
-
-            tagsRemove?.ForEach(s =>
-            {
-                if (installationModel.Tags.Contains(s))
-                    installationModel.Tags.Remove(s);
-            });
-
-            AppSettings.DeviceInstallation = installationModel;
-
-            switch (Device.RuntimePlatform)
-            {
-                case Device.Android:
+                var installationModel = new DeviceInstallationModel
                 {
-                    installationModel.Platform = "Fcm";
-                    break;
+                    InstallationId = AppSettings.DeviceInstallation?.InstallationId,
+                    PushChannel = AppSettings.PnsId,
+                    Tags = AppSettings.DeviceInstallation?.Tags ?? new List<string>()
+                };
+
+                tagsAdd?.ForEach(s =>
+                {
+                    if (!installationModel.Tags.Contains(s))
+                        installationModel.Tags.Add(s);
+                });
+
+                tagsRemove?.ForEach(s =>
+                {
+                    if (installationModel.Tags.Contains(s))
+                        installationModel.Tags.Remove(s);
+                });
+
+                AppSettings.DeviceInstallation = installationModel;
+
+                switch (Device.RuntimePlatform)
+                {
+                    case Device.Android:
+                    {
+                        installationModel.Platform = "Fcm";
+                        break;
+                    }
+                    default: throw new NotImplementedException();
                 }
-                default: throw new NotImplementedException();
+
+                var client = new HttpClient();
+
+                var updateUri = new Uri(
+                    "https://scouts-chat.azurewebsites.net/Installation/CreateOrUpdateInstallation",
+                    UriKind.Absolute);
+
+                var json = JsonConvert.SerializeObject(installationModel);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var updateResult = await client.PutAsync(updateUri, content);
+
+                if (updateResult.IsSuccessStatusCode) AppSettings.QueueSaveChangedObjects(new []{nameof(AppSettings.DeviceInstallation)});
             }
-
-            var client = new HttpClient();
-
-            var updateUri = new Uri(
-                "https://scouts-chat.azurewebsites.net/Installation/CreateOrUpdateInstallation",
-                UriKind.Absolute);
-
-            var json = JsonConvert.SerializeObject(installationModel);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var updateResult = await client.PutAsync(updateUri, content);
-
-            if (updateResult.IsSuccessStatusCode) AppSettings.QueueSaveChangedObjects(new []{nameof(AppSettings.DeviceInstallation)});
+            catch (Exception e)
+            {
+                Crashes.TrackError(e);
+            }
         }
 
         public static async void DeleteServerInstallation()

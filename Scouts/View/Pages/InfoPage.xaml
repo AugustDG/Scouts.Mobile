@@ -238,17 +238,17 @@
                          IsVisible="{Binding IsSearching, Converter={StaticResource NegateBooleanConverter}}">
 
                 <ImageButton Source="@drawable/add.png"
-                             HorizontalOptions="CenterAndExpand"
-                             Margin="0, 0, -5, 0"
+                             HorizontalOptions="EndAndExpand"
 
                              Command="{Binding ShowAddItemCommand}"
 
+                             IsVisible="{Binding CanUserAdd}"
                              BackgroundColor="Transparent"
                              HeightRequest="40" />
 
                 <ImageButton Source="@drawable/search.png"
-                             Margin="-10, 0, -5, 0"
-                             HorizontalOptions="CenterAndExpand"
+                             Margin="-10, 0, 0, 0"
+                             HorizontalOptions="EndAndExpand"
 
                              Command="{Binding ShowSearchCommand}"
 

@@ -39,6 +39,8 @@ namespace Scouts.ViewModels
         {
             IsBusy = true;
             
+            if (AppSettings.CurrentUser is null || user is null) return;
+            
             await Task.Run(() =>
             {
                 var userIds = new List<string> {AppSettings.CurrentUser.UserId, user.UserId};

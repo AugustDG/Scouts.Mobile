@@ -238,9 +238,10 @@ namespace Scouts.ViewModels
 
             if (InfoEventType == 3 && InfoPublicType == 7 && !_hasAsked)
             {
-                if (!await MaterialDialog.Instance.ConfirmAsync("Confirmation",
+                if (!await MaterialDialog.Instance.ConfirmAsync(
                     "Vous n'avez pas changé le type d'article, ni le public concerné: êtes-vous sûrs de procéder?",
-                    "Oui!", "Peut-être pas...")?? false)
+                    "Confirmation",
+                    "Oui!", "Peut-être pas...", ColorSettings.DefaultMaterialAlertDialogConfiguration) ?? false)
                 {
                     CarouselPosition = 0;
                     IsBusy = false;
@@ -250,9 +251,9 @@ namespace Scouts.ViewModels
             }
             else if (InfoEventType == 3 && !_hasAsked)
             {
-                if (!await MaterialDialog.Instance.ConfirmAsync("Confirmation",
-                    "Vous n'avez pas changé le type d'article: êtes-vous sûrs de procéder?",
-                    "Oui!", "Peut-être pas...") ?? false)
+                if (!await MaterialDialog.Instance.ConfirmAsync(
+                    "Vous n'avez pas changé le type d'article: êtes-vous sûrs de procéder?", "Confirmation",
+                    "Oui!", "Peut-être pas...", ColorSettings.DefaultMaterialAlertDialogConfiguration) ?? false)
                 {
                     CarouselPosition = 0;
                     IsBusy = false;
@@ -262,9 +263,9 @@ namespace Scouts.ViewModels
             }
             else if (InfoPublicType == 7 && !_hasAsked)
             {
-                if (!await MaterialDialog.Instance.ConfirmAsync("Confirmation",
-                    "Vous n'avez pas changé le public concerné: êtes-vous sûrs de procéder?",
-                    "Oui!", "Peut-être pas...") ?? false)
+                if (!await MaterialDialog.Instance.ConfirmAsync(
+                    "Vous n'avez pas changé le public concerné: êtes-vous sûrs de procéder?", "Confirmation",
+                    "Oui!", "Peut-être pas...", ColorSettings.DefaultMaterialAlertDialogConfiguration) ?? false)
                 {
                     CarouselPosition = 0;
                     IsBusy = false;
@@ -323,13 +324,14 @@ namespace Scouts.ViewModels
                 _docBytes = null;
                 ButtonImage = "@drawable/add_100.png";
                 ImageAspect = Aspect.AspectFit;
-                
+
                 AppEvents.RefreshInfoFeed.Invoke(this, EventArgs.Empty);
 
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    var isQuit = await MaterialDialog.Instance.ConfirmAsync("SUCCÈS", "Info envoyée avec succès :D", "OK!",
-                        "Une autre!");
+                    var isQuit = await MaterialDialog.Instance.ConfirmAsync( "Info envoyée avec succès :D","SUCCÈS",
+                        "OK!",
+                        "Une autre!", ColorSettings.DefaultMaterialAlertDialogConfiguration);
 
                     if (isQuit ?? false)
                     {

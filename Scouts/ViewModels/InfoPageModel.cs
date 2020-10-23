@@ -28,10 +28,18 @@ namespace Scouts.ViewModels
             new ObservableRangeCollection<InfoModel>();
 
         public DateTime LastRefreshed;
-        
+
         public bool CanShowDeets = true;
 
         public FilterDefinition<InfoModel> CurrentFilterDefinition = new FilterDefinitionBuilder<InfoModel>().Empty;
+
+        public bool CanUserAdd
+        {
+            get => _canUserAdd;
+            set => SetProperty(ref _canUserAdd, value);
+        }
+
+        private bool _canUserAdd;
 
         public bool IsSearching
         {
@@ -40,7 +48,7 @@ namespace Scouts.ViewModels
         }
 
         private bool _isSearching;
-        
+
         public Color FilterButtColor
         {
             get => _filterButtColor;
@@ -51,7 +59,7 @@ namespace Scouts.ViewModels
 
         public Command ShowAddItemCommand => new Command(ShowAddPopup);
         public Command ShowSearchCommand => new Command(ToggleSearch);
-        public Command SearchItemsCommand => new MvvmHelpers.Commands.Command<string>(SearchItems); 
+        public Command SearchItemsCommand => new MvvmHelpers.Commands.Command<string>(SearchItems);
         public Command ShowDetailsCommand => new MvvmHelpers.Commands.Command<InfoModel>(ShowDetailsPopup);
         public Command ShowFilterCommand => new Command(ShowFilter);
         public Command ShowOptionsCommand => new Command(ShowDrop);
@@ -69,19 +77,27 @@ namespace Scouts.ViewModels
         public InfoPageModel(InfoPage pg)
         {
             _page = pg;
-            
+
             FilterButtColor = (Color) Application.Current.Resources["SecondaryForegroundColor"];
 
             AppEvents.WipeAllUserData += WipeAllData;
 
-            _filterPopup ??= new FilterPopup ();
+            _filterPopup ??= new FilterPopup();
 
             AppEvents.FilterInfos += FilterInfos;
             AppEvents.ClearFilter += ClearFilter;
+            AppEvents.UserTypeChanged += UserTypeChanged;
 
             _detailsPopup ??= new InfoDetailsPopup();
 
             AppEvents.RefreshInfoFeed += delegate { RefreshNewsList(); };
+        }
+
+        private void UserTypeChanged(object sender, EventArgs e)
+        {
+            CanUserAdd = AppSettings.CurrentUser?.UserType == UserType.Admin ||
+                         AppSettings.CurrentUser?.UserType == UserType.Counselor ||
+                         AppSettings.CurrentUser?.UserType == UserType.Counselor;
         }
 
         private void ToggleSearch()
@@ -109,9 +125,9 @@ namespace Scouts.ViewModels
         private async void ShowAddPopup()
         {
             IsBusy = true;
-            
+
             _addItemPopup = new AddItemPopup();
-            
+
             if (!PopupNavigation.Instance.PopupStack.Contains(_addItemPopup))
                 await PopupNavigation.Instance.PushAsync(_addItemPopup);
 
@@ -147,7 +163,7 @@ namespace Scouts.ViewModels
             if (deleteResult.DeletedCount == 1) Helpers.DisplayMessage("Article supprimé avec succès!");
 
             RefreshNewsList();
-            
+
             CanShowDeets = true;
         }
 
@@ -200,7 +216,7 @@ namespace Scouts.ViewModels
                 {
                     var folderName = model.id.ToString();
 
-                    model.Image = await DropboxClient.Instance.GetImageUrl(folderName);   
+                    model.Image = await DropboxClient.Instance.GetImageUrl(folderName);
                 }
             });
         }
@@ -214,7 +230,9 @@ namespace Scouts.ViewModels
                 Language = "fr"
             };
 
-            CurrentFilterDefinition = new FilterDefinitionBuilder<InfoModel>().Where(x => x.Title.Contains(query) || x.Summary.Contains(query));
+            CurrentFilterDefinition =
+                new FilterDefinitionBuilder<InfoModel>().Where(
+                    x => x.Title.Contains(query) || x.Summary.Contains(query));
 
             RefreshNewsList();
         }
@@ -243,7 +261,7 @@ namespace Scouts.ViewModels
         private void ClearFilter(object sender, EventArgs args)
         {
             var filterModel = (FilterPopupModel) sender;
-            
+
             filterModel.ScriptChange = true;
 
             filterModel.IsUrgent = false;
