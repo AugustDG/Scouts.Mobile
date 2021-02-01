@@ -9,7 +9,7 @@ namespace Scouts.Fetchers
     {
         public async Task<Calendar> GetCalendar()
         {
-            var uri = new Uri("https://calendar.google.com/calendar/ical/augustomp55%40gmail.com/private-ad7b213927d47e9a58e6f19087cff40b/basic.ics", UriKind.Absolute);
+            var uri = new Uri("CALENDAR_URL", UriKind.Absolute);
 
             using var client = new WebClient();
             var s = await client.DownloadStringTaskAsync(uri);
