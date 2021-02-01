@@ -11,7 +11,7 @@ namespace Scouts.Fetchers
 {
     public class DropboxClient
     {
-        private const string AccessToken = "S2biWwNIFh4AAAAAAAABBdzK9voEdobw6KRu1jk03X9ppwD4X_qXF34oOSs2fLuY";
+        private const string AccessToken = "{DROPBOX_TOKEN}";
         public static DropboxClient Instance { get; set; }
         
         private Dropbox.Api.DropboxClient _client;
