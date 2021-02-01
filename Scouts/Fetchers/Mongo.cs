@@ -16,7 +16,7 @@ namespace Scouts.Fetchers
         
         //MongoDB credentials to access the database
         private const string MONGO_URI =
-            "mongodb://dev:DY0w2k1tYnSCx62g@generaldata-shard-00-00-d1pl7.mongodb.net:27017,generaldata-shard-00-01-d1pl7.mongodb.net:27017,generaldata-shard-00-02-d1pl7.mongodb.net:27017/test?ssl=true&replicaSet=GeneralData-shard-0&authSource=admin&retryWrites=true&w=majority&connect=replicaSet&connectTimeoutMS=60000&socketTimeoutMS=60000";
+            "{MONGO_URI}";
 
         private const string DATA_DATABASE_NAME = "Data";
         private const string USER_DATABASE_NAME = "Users";
